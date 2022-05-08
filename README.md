@@ -25,3 +25,8 @@ This step includes the following sub-steps:
 
 [Visualize the notebook! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb)
 
+
+## 2. Population vectorization
+
+
+## 3. Creating zoning
