@@ -12,7 +12,7 @@ These Jupyter Notebooks can be run locally or in the Cloud (we recommend using [
 although Google Colab should be powerful enough for very small countries), and we provide the documentation for running it
 in both the SaturnCloud and locally [TODO].
 
-## Building the road network model from Open-Street Maps
+## 1. Building the road network model from Open-Street Maps
 
 The first step in the analytics setup process is the development of the Road Network model from OSM data. 
 
