@@ -23,5 +23,5 @@ This step includes the following sub-steps:
 * Making sure that only links from within the country borders are kept in the model
 * Veryfing if the network is a routable by computing a path through the network
 
-[Visualize the notebook! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/1.Build_model_from_OSM.ipynb)
+[Visualize the notebook! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb)
 
