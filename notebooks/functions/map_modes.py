@@ -8,10 +8,7 @@ def map_all_modes(project):
     network_links = folium.FeatureGroup("links")
     network_nodes = folium.FeatureGroup("nodes")
     car = folium.FeatureGroup("Car")
-    walk = folium.FeatureGroup("Walk")
-    bike = folium.FeatureGroup("Bike")
-    transit = folium.FeatureGroup("Transit")
-    layers = [network_links, network_nodes, car, walk, bike, transit]
+    layers = [network_links, network_nodes, car]
 
     # We do some Python magic to transform this dataset into the format required by Folium
     # We are only getting link_id and link_type into the map, but we could get other pieces of info as well
@@ -27,17 +24,6 @@ def map_all_modes(project):
         if 'c' in row.modes:
             _ = folium.vector_layers.PolyLine(points, popup=f'<b>link_id: {row.link_id}</b>', tooltip=f'{row.modes}',
                                              color='red', weight=1.5).add_to(car)
-        if 'b' in row.modes:
-            _ = folium.vector_layers.PolyLine(points, popup=f'<b>link_id: {row.link_id}</b>', tooltip=f'{row.modes}',
-                                             color='yellow', weight=1.5).add_to(bike)
-
-        if 't' in row.modes:
-            _ = folium.vector_layers.PolyLine(points, popup=f'<b>link_id: {row.link_id}</b>', tooltip=f'{row.modes}',
-                                             color='blue', weight=1.5).add_to(transit)
-
-        if 'w' in row.modes:
-            _ = folium.vector_layers.PolyLine(points, popup=f'<b>link_id: {row.link_id}</b>', tooltip=f'{row.modes}',
-                                             color='green', weight=1.5).add_to(walk)
             
     # And now we get the nodes
 
