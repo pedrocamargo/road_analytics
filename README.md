@@ -27,12 +27,12 @@ This step includes the following sub-steps:
 
 ## 2. Vectorizing population from a raster image and adding it to the project database
 
-This notebook is intended to get the country population from a raster image file and processing it so it can be added as geometry points into a new table of the project database.
+This notebook is intended to get the country population information from a raster image file and processing it so it can be added as geometry points into a new table of the project database.
 
 This step includes the following sub-steps:
 
 * Getting country main area to be transformed into dataframe according to its boarders. This is important to eliminate raster information outside the country boarders
-* Processing the raster image, i.e. transforming it into a dataframe
+* Processing the raster population information and transforming it into a dataframe
 * Comparing the total vectorized population to a World Bank source ([source here](https://data.worldbank.org/indicator/SP.POP.TOTL))
 * Creating a new table inside the project model for the vectorized population
 * Adding point geometries according to the population latitude and longitude coordinates
