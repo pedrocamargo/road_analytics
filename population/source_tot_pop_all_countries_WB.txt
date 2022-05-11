@@ -1,4 +1,0 @@
-The World Bank source - Total population for all countries:
-https://data.worldbank.org/indicator/SP.POP.TOTL
-
-Zip file: API_SP.POP.TOTL_DS2_en_csv_v2_4019998.zip
