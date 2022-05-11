@@ -7,7 +7,7 @@ def bridge_stats(links):
     vehicle_links = links[(links["modes"].str.contains("c")) & (links["modes"].str.contains("t"))]
     bridge_links = vehicle_links[vehicle_links["bridge"].notna()]
     
-    print("----- Bridge - Overall Statistics -----")
+    print("----- Bridge - Overall Stats -----")
     print(" ")
     table = [["Bridge", len(bridge_links), 
               np.around(bridge_links.sum(numeric_only=True)['distance'], decimals=2)],
@@ -26,7 +26,7 @@ def bridge_stats(links):
         table = [[len(bridge_bridges),
                   bridge_bridges.sum(numeric_only=True)['distance']/1000]]
 
-        print(tabulate(table, headers=['links', 'total_km'], tablefmt='github', floatfmt=".2f"))
+        print(tabulate(table, headers=['links', 'km'], tablefmt='github', floatfmt=".2f"))
         print("")
     
     print("----- Bridge - Link Type -----")
@@ -35,7 +35,7 @@ def bridge_stats(links):
                             orient='index', columns=['total_km'])
     df.insert(0, 'links', bridge_links.groupby('link_type').count()['distance'])
     print(tabulate(df, tablefmt="github", floatfmt=(".0f", ".0f", ".2f"), 
-                   headers=["Link Type", "Links", 'Total km']))
+                   headers=["Link Type", "Links", 'km']))
     print("")
     
     print("----- Bridge - Pavement Surface -----")
@@ -45,5 +45,5 @@ def bridge_stats(links):
                             orient='index', columns=['total_km'])
     df.insert(0, 'links', bridge_links.groupby('surface').count()['distance'])
     print(tabulate(df, tablefmt="github", floatfmt=(".0f", ".0f", ".2f"), 
-                   headers=["Surface TYpe", "Links", 'Total km']))
+                   headers=["Surface Type", "Links", 'km']))
     print("")

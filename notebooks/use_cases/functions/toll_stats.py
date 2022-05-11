@@ -8,7 +8,7 @@ def toll_stats(links):
     toll_links = vehicle_links[vehicle_links["toll"].notna()]
     
     if len(toll_links.toll.value_counts()) != 0:
-        print("----- Tolls - Overall Statistics -----")
+        print("----- Tolls - Overall Stats -----")
         print(" ")
         table = [["Tolls", len(toll_links), 
                   np.around(toll_links.sum(numeric_only=True)['distance']/1000, decimals=2)],
@@ -39,9 +39,6 @@ def toll_stats(links):
         print("")
         
     else:
-        if type(model_place) == str:
-            print(f"There are no tolls in {model_place}.")
-        else:
-            print(f"There are no tolls in the search area.")
-    print("")
+        print(f"There are no tolls in the search area.")
+        print("")
             
