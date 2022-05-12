@@ -2,8 +2,10 @@ import pandas as pd
 import zipfile
 import requests
 from io import BytesIO
+from aequilibrae.project import Project
 
-def check_pop(model_place: str, df_input: pd.DataFrame):
+
+def check_pop(model_place: str, project: Project):
     '''
         Function that receives a population dataframe and compares its total value to a well known population data source.
         In this case, the well known source is a publicly available World Bank dataset, which can be found here: https://data.worldbank.org/indicator/SP.POP.TOTL
@@ -20,7 +22,10 @@ def check_pop(model_place: str, df_input: pd.DataFrame):
                 break
     
     source_value = df_source.loc[df_source['Country Name'] == model_place, '2020']
-    df = pd.DataFrame({'': ['Vectorized from raster', 'World Bank source'], 'Total population': [int(df_input.population.sum()), int(source_value)]})
+    raster_pop = project.conn.execute('Select sum(population) from raw_population').fetchone()[0]
+    df = pd.DataFrame({'': ['Vectorized from raster', 'World Bank source'], 'Total population': [int(raster_pop), int(source_value)]})
+    
+    
     df = df.groupby('').sum()
     df['Total population'] = df.apply(lambda x: "{:,}".format(x['Total population']), axis=1)
     
