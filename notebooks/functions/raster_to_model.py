@@ -1,14 +1,23 @@
-from rasterio.io import DatasetReader
 from shapely.geometry.polygon import Polygon
 import numpy as np
 import pandas as pd
 from scipy.sparse import coo_matrix
+import rasterio
+from aequilibrae.project import Project
+from .country_main_area import get_main_area
 
-def raster_to_df(dataset: DatasetReader, main_area: Polygon):
+
+def raster_to_aequilibrae(population_layer: str, project: Project):
     '''
         Function to process raster images in Python
     '''
+
     
+    project.conn.execute('Drop table if exists raw_population')
+    project.conn.commit()
+    main_area = get_main_area(project)
+    
+    dataset = rasterio.open(population_layer)
     minx, miny, maxx, maxy = main_area.bounds
     width = dataset.width
     height = dataset.height
@@ -43,4 +52,10 @@ def raster_to_df(dataset: DatasetReader, main_area: Polygon):
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
     
-    return df
+    
+    conn = project.conn
+    df.to_sql('raw_population', conn, if_exists='replace', index=False)
+    conn.execute("select AddGeometryColumn( 'raw_population', 'geometry', 4326, 'POINT', 'XY', 1);")
+    conn.execute("UPDATE raw_population SET Geometry=MakePoint(longitude, latitude, 4326)")
+    conn.commit()
+    
