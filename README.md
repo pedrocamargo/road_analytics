@@ -44,8 +44,8 @@ A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbvie
 **In a nutshell**: Aggregates population data into analysis zones
 with geographic resolution proportional to population density
 
-This jupyter notebook includes a cloropleth map with the population of
-each zone and can visualized -> UNDER DEVELOPMENT
+This jupyter notebook includes a choropleth map with the population of
+each zone and can visualized -> **UNDER DEVELOPMENT**
 
 ### 1.3 Importing Point-of-Interest data
 
@@ -53,7 +53,7 @@ each zone and can visualized -> UNDER DEVELOPMENT
 from OSM into the model's database
 
 This jupyter notebook includes the visualization of all hospitals, schools
-and airports imported and can visualized -> UNDER DEVELOPMENT
+and airports imported and can visualized -> **UNDER DEVELOPMENT**
 
 ## 2 Building the transport model
 
@@ -102,11 +102,11 @@ multiple countries
 10% of links with the highest demand (can use either synthetic data or from 
 mobility data)
 
-UNDER DEVELOPMENT.
+**UNDER DEVELOPMENT.**
 
 ### 4.1 Impact of flooding into hospital access
 
 **In a nutshell**: Identifies the population cut-off from hospital access for
 a given flooding scenario
 
-UNDER DEVELOPMENT.
+**UNDER DEVELOPMENT.**
