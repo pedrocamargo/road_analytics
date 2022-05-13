@@ -34,7 +34,6 @@ jobs:
     - name: Builds documentation
       run: |
         cd docs
-        python table_documentation.py
         sphinx-build -b html source build
 
     - name: Keeps documentation on GitHub
