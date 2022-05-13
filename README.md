@@ -8,7 +8,7 @@ quick preview of the facilities are provided below:
 
 # Notebooks
 
-The notebooks are divided in three separate groups, from building the analytics 
+The notebooks are divided in four separate groups, from building the analytics 
 models from a variety of data sources to computing estimates of the impact of 
 changes to the transportation network. 
 
@@ -38,3 +38,74 @@ computationally-efficient and aggregated into customizable polygons
 a vector format
 
 A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.Vectorizing_population.ipynb)
+
+#### 1.2.2 Aggregating population 
+
+**In a nutshell**: Aggregates population data into analysis zones
+with geographic resolution proportional to population density
+
+This jupyter notebook includes a cloropleth map with the population of
+each zone and can visualized -> UNDER DEVELOPMENT
+
+### 1.3 Importing Point-of-Interest data
+
+**In a nutshell**: Imports several classes of Point-of-Interest data
+from OSM into the model's database
+
+This jupyter notebook includes the visualization of all hospitals, schools
+and airports imported and can visualized -> UNDER DEVELOPMENT
+
+## 2 Building the transport model
+
+Begins the modelling process per se by incorporating a series of
+assumptions aligned with best-practices from the transport modelling world
+to turn the analytics model into a simplified transport model capable of
+providing traffic estimates for any link in the road network model.
+
+### 2.1 Augmenting the road network model
+
+**In a nutshell**: Assign speeds and road capacities as a function of road
+type and pavement type/condition.
+
+This jupyter notebook includes a map showing the routes in the network 
+with the highest capacity and can visualized -> UNDER DEVELOPMENT.
+
+### 2.2 Implementing a simplified transport model
+
+**In a nutshell**: Produces transportation demand matrices based on 
+the population and PoI imported
+
+This jupyter notebook includes a map showing the traffic distribution in 
+an abstract map that effectively shows the overall traffic demand 
+across the network and can visualized -> UNDER DEVELOPMENT.
+
+## 3 Mobility data
+
+**In a nutshell**: Incorporates mobility data to calibrate and/or replace
+the simplified demand model developed on **2.2**
+
+### 3.1 Creation of transport demand matrices from CVTS
+
+**In a nutshell**: Processes the CVTS data for Vietnam to obtain trip
+matrices that can be used in conjunction with the personal travel 
+demand matrices produced on **2.2**.
+
+## 4 Use-cases
+
+**In a nutshell**: Generalizable use-cases that may be of interest in 
+multiple countries
+
+### 4.1 Link criticality analysis for links with the highest capacity
+
+**In a nutshell**: Computes the impact of the disruption of each one of the 
+10% of links with the highest demand (can use either synthetic data or from 
+mobility data)
+
+UNDER DEVELOPMENT.
+
+### 4.1 Impact of flooding into hospital access
+
+**In a nutshell**: Identifies the population cut-off from hospital access for
+a given flooding scenario
+
+UNDER DEVELOPMENT.
