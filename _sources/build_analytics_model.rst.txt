@@ -36,7 +36,7 @@ This step includes the following sub-steps:
   points
 
 `Visualize the notebook! (it may take time to open)
-<https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb>`_
+<https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.1_Build_model_from_OSM.ipynb>`_
 
 
 Use Cases enabled:
@@ -81,7 +81,7 @@ This process includes the following steps:
 * Comparing the total vectorized population to a (`World Bank source
   <https://data.worldbank.org/indicator/SP.POP.TOTL>`_)
 * Visualizing the population as a heatmap for inspection `Visualize the
-  notebook! <https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.Vectorizing_population.ipynb>`_
+  notebook! <https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.2.1_Vectorizing_population.ipynb>`_
 
 
 
