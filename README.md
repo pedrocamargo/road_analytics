@@ -4,7 +4,7 @@ A set of Jupyter notebooks to support Road network analytics based on Open-Sourc
 [Geospatial Planning & Budgeting Platform (GPBP) Transport sector use cases](https://docs.google.com/document/d/1AugI7_AiD2v-ES_actmseHsFMmi-oMdLxGF2YAcv5XY)
 
 [FULL DOCUMENTATION IS AVAILABLE](https://pedrocamargo.github.io/road_analytics/), but a
-quick preview of the facilities are provided below:
+quick preview of the resources developed is provided below:
 
 # Notebooks
 
@@ -22,7 +22,7 @@ Performs all the data import
 format
 
 We can see the imported result on a browser 
-[VISUALIZE IT! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb)
+[VISUALIZE IT! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.1_Build_model_from_OSM.ipynb)
 
 We can quickly compute network statistics at this point
 [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_cases/1.Descriptive_analytics.ipynb)
@@ -37,7 +37,7 @@ computationally-efficient and aggregated into customizable polygons
 **In a nutshell**: Imports population data from Raster format into 
 a vector format
 
-A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.Vectorizing_population.ipynb)
+A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.2.1_Vectorizing_population.ipynb)
 
 #### 1.2.2 Aggregating population 
 
@@ -68,7 +68,8 @@ providing traffic estimates for any link in the road network model.
 type and pavement type/condition.
 
 This jupyter notebook includes a map showing the routes in the network 
-with the highest capacity and can visualized -> UNDER DEVELOPMENT.
+with the highest capacity and can visualized. 
+[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.1_augments_network_data.ipynb)
 
 ### 2.2 Implementing a simplified transport model
 

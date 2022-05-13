@@ -18,7 +18,11 @@ each one of the streets, while the information on actual link capacity is missin
 from OSM, as it is an abstraction particular to the transport modelling world.
 
 For this purpose, we augment the network with asserted values, which we list in
-the :ref:`road_capacities` table
+the :ref:`road_capacities` table.
+
+Finally, we also take the type of road surface in consideration, as a paved street
+will always have higher speed and capacity to a similar unpaved road, according
+to the multiplying constants listed on the :ref:`pavement_constraints` table.
 
 
 Customizing network assumptions
