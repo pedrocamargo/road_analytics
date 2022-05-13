@@ -3,40 +3,38 @@
 A set of Jupyter notebooks to support Road network analytics based on Open-Source and Open-Data
 [Geospatial Planning & Budgeting Platform (GPBP) Transport sector use cases](https://docs.google.com/document/d/1AugI7_AiD2v-ES_actmseHsFMmi-oMdLxGF2YAcv5XY)
 
+[FULL DOCUMENTATION IS AVAILABLE](https://pedrocamargo.github.io/road_analytics/), but a
+quick preview of the facilities are provided below:
+
 # Notebooks
 
-In order to enable non-technical experts to utilize this tool, we have set it as a sequence of Jupyter notebooks that 
-implement the analyses and analysis frameworks described in the GPBP documentation.
+The notebooks are divided in three separate groups, from building the analytics 
+models from a variety of data sources to computing estimates of the impact of 
+changes to the transportation network. 
 
-These Jupyter Notebooks can be run locally or in the Cloud (we recommend using [SaturnCloud](https://saturncloud.io/), 
-although Google Colab should be powerful enough for very small countries), and we provide the documentation for running it
-in both the SaturnCloud and locally [TODO].
+## 1 Building the analytics model
 
-## 1. Building the road network model from Open-Street Maps
+Performs all the data import
 
-The first step in the analytics setup process is the development of the Road Network model from OSM data. 
+### 1.1 Importing the OSM network
 
-This step includes the following sub-steps:
+**In a nutshell**: Imports the OSM network into a computationally-efficient 
+format
 
-* Downloading and interpreting (parsing) the OSM network
-* Downloading the country borders from Open-Street Maps
-* Making sure that only links from within the country borders are kept in the model
-* Veryfing if the network is a routable by computing a path through the network
-* Display general stats regarding link types and pavement surfaces
-* Display specific stats for bridges, tolls, and tunnels and their link types and pavement surfaces
+We can see the imported result on a browser 
+[VISUALIZE IT! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb)
 
-[Visualize the notebook! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.Build_model_from_OSM.ipynb)
+We can quickly compute network statistics at this point
+[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_cases/1.Descriptive_analytics.ipynb)
 
-## 2. Vectorizing population from a raster image and adding it to the project database
+### 1.2 Importing Population data
 
-This notebook is intended to get the country population information from a raster image file and processing it so it can be added as geometry points into a new table of the project database.
+**In a nutshell**: Imports population data from Raster format into a 
+computationally-efficient and aggregated into customizable polygons
 
-This step includes the following sub-steps:
+#### 1.2.1 Importing raw population data
 
-* Getting country main area to be transformed into dataframe according to its boarders. This is important to eliminate raster information outside the country boarders
-* Processing the raster population information and transforming it into a dataframe
-* Comparing the total vectorized population to a World Bank source ([source here](https://data.worldbank.org/indicator/SP.POP.TOTL))
-* Creating a new table inside the project model for the vectorized population
-* Adding point geometries according to the population latitude and longitude coordinates
+**In a nutshell**: Imports population data from Raster format into 
+a vector format
 
-[Visualize the notebook!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.Vectorizing_population.ipynb)
+A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/2.Vectorizing_population.ipynb)
