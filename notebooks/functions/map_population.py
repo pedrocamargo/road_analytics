@@ -5,13 +5,23 @@ from aequilibrae.project import Project
 from shapely import wkb
 import geopandas as gpd
 
-def map_pop(project: Project):
+def map_pop(project: Project, poi=None, radius=None):
     
     '''
         Function that creates a population heat map.
     '''
     
-    pop_data = pd.DataFrame(project.conn.execute("select latitude, longitude, population from raw_population"), columns=['lat', 'long', 'weight'])
+    if poi == None or radius ==None:
+        sql = "select latitude, longitude, population from raw_population"
+    else:
+        r = radius / 111
+        sql = '''SELECT latitude, longitude, population from raw_population 
+            WHERE ROWID IN 
+            (SELECT ROWID FROM SpatialIndex 
+              WHERE f_table_name = 'raw_population' AND search_frame = 
+              BuildCircleMbr({}, {},{}))'''.format(poi[1], poi[0], r)
+    pop_data = pd.DataFrame(project.conn.execute(sql), columns=['lat', 'long', 'weight'])
+    
     
     # We create the map
     long, lat = tuple([pop_data['long'].mean(), pop_data['lat'].mean()])
@@ -22,7 +32,7 @@ def map_pop(project: Project):
                     min_opacity=0.05, 
                     max_opacity=0.9, 
                     radius=25,
-                    use_local_extrema=False)
+                    use_local_extrema=True)
 
     map_osm.add_child(hm)
     
