@@ -48,7 +48,7 @@ def raster_to_aequilibrae(population_layer: str, project: Project):
     rows = y_idx[mat.row]
     cols = x_idx[mat.col]
     df = pd.DataFrame({'longitude': cols, 'latitude': rows, 'population': mat.data})
-    df = df.loc[df.population >= 0, :]  # Pixels outside Vietnam have -999
+    df = df.loc[df.population >= 0, :]  # Pixels outside the modeled area have negative values
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
     
@@ -57,5 +57,6 @@ def raster_to_aequilibrae(population_layer: str, project: Project):
     df.to_sql('raw_population', conn, if_exists='replace', index=False)
     conn.execute("select AddGeometryColumn( 'raw_population', 'geometry', 4326, 'POINT', 'XY', 1);")
     conn.execute("UPDATE raw_population SET Geometry=MakePoint(longitude, latitude, 4326)")
+    conn.execute("SELECT CreateSpatialIndex( 'raw_population' , 'geometry' );")
     conn.commit()
     
