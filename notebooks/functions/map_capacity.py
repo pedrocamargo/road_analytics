@@ -1,10 +1,27 @@
 import folium
+import pandas as pd
+import geopandas as gpd
 
-def map_capacity(project):
+def map_capacity(project, location=None, radius=None, cap_threshold=1000):
     links = project.network.links.data
+    longc, latc = project.conn.execute('select avg(xmin), avg(ymin) from idx_links_geometry').fetchone()
+    
+    if None not in [location, radius]:
+        r = radius / 111
+        sql = '''SELECT link_id from links
+            WHERE ROWID IN 
+            (SELECT ROWID FROM SpatialIndex 
+              WHERE f_table_name = 'links' AND search_frame = 
+              BuildCircleMbr({}, {},{}))'''.format(location[1], location[0], r)
+        df = pd.read_sql(sql, project.conn)
+        links = links[links.link_id.isin(df.link_id)]
+        gdf = gpd.GeoDataFrame(links[['link_id', 'geometry']], geometry='geometry')
+        centr = gdf.geometry.centroid
+        longc = centr.x.mean()
+        latc = centr.y.mean()
     
     max_cap = links[['capacity_ab', 'capacity_ba']].max().max()
-    multiplier = 7 / max_cap
+    multiplier = 8 / max_cap
     
     # We create our Folium layers
     network_links = folium.FeatureGroup("links")
@@ -21,16 +38,15 @@ def map_capacity(project):
         
         cap = max(row.capacity_ab, row.capacity_ba)
         w = cap * multiplier
-        _ = folium.vector_layers.PolyLine(points, popup=f'<b>capacity: {cap}</b>', tooltip=f'{row.modes}',
+        _ = folium.vector_layers.PolyLine(points, tooltip=f'<b>capacity: {cap}</b>',
                                           color='gray', weight=w).add_to(network_links)
 
-        if cap >= 1000:
-           _ = folium.vector_layers.PolyLine(points, popup=f'<b>capacity: {cap}</b>', tooltip=f'{row.modes}',
+        if cap >= cap_threshold:
+           _ = folium.vector_layers.PolyLine(points, tooltip=f'<b>capacity: {cap}</b>',
                                           color='red', weight=w).add_to(high_capacity)
     
     # We create the map
-    long, lat = project.conn.execute('select avg(xmin), avg(ymin) from idx_links_geometry').fetchone()
-    map_osm = folium.Map(location=[lat, long], zoom_start=11)
+    map_osm = folium.Map(location=[latc, longc], zoom_start=11)
 
     # add all layers
     for layer in layers:
