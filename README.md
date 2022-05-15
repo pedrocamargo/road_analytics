@@ -119,7 +119,7 @@ mobility data)
 
 **NOTEBOOK UNDER DEVELOPMENT.**
 
-### 4.3 Impact of flooding into hospital access
+### 4.4 Impact of flooding into hospital access
 
 **In a nutshell**: Identifies the population cut-off from hospital access for
 a given flooding scenario
