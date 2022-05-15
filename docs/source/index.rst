@@ -46,6 +46,7 @@ Contents
    :maxdepth: 2
 
    build_analytics_model
+   data_sources
    travel_modelling
    concepts
    use_instructions
