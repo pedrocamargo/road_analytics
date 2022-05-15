@@ -101,12 +101,15 @@ multiple countries
 **In a nutshell**: Computes the an estimate of the traffic for any given link.
 It also allows for extracting the origins and destinations using said link/asset
 
+**NOTEBOOK UNDER DEVELOPMENT.**
+
 ### 4.2 Bottleneck identification
 
 **In a nutshell**: Identifies the sections (links/assets) in the network that 
 are most likely to be bottlenecks as a function of their capacity and estimated
 traffic volumes.
 
+**NOTEBOOK UNDER DEVELOPMENT.**
 
 ### 4.3 Link criticality analysis for links with the highest capacity
 
@@ -114,11 +117,11 @@ traffic volumes.
 10% of links with the highest demand (can use either synthetic data or from 
 mobility data)
 
-**UNDER DEVELOPMENT.**
+**NOTEBOOK UNDER DEVELOPMENT.**
 
 ### 4.3 Impact of flooding into hospital access
 
 **In a nutshell**: Identifies the population cut-off from hospital access for
 a given flooding scenario
 
-**UNDER DEVELOPMENT.**
+**NOTEBOOK UNDER DEVELOPMENT.**
