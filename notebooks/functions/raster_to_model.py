@@ -5,19 +5,32 @@ from scipy.sparse import coo_matrix
 import rasterio
 from aequilibrae.project import Project
 from .country_main_area import get_main_area
+import geopandas as gpd
+import urllib.request
+from os.path import join, isfile
+from tempfile import gettempdir
 
 
-def raster_to_aequilibrae(population_layer: str, project: Project):
+
+def pop_to_model(project: Project, model_place:str):
     '''
         Function to process raster images in Python
     '''
+
+    
+    pop_path = f'../model/population/all_raster_pop_source.csv'
+    df = pd.read_csv(pop_path)
+    url = df[df.Country.str.upper()==model_place.upper()].data_link.values[0]
+    dest_path = join(gettempdir(), f"pop_{model_place}.tif")
+    if not isfile(dest_path):
+        urllib.request.urlretrieve(url, dest_path)
 
     
     project.conn.execute('Drop table if exists raw_population')
     project.conn.commit()
     main_area = get_main_area(project)
     
-    dataset = rasterio.open(population_layer)
+    dataset = rasterio.open(dest_path)
     minx, miny, maxx, maxy = main_area.bounds
     width = dataset.width
     height = dataset.height
