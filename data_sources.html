@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>4. General concepts &#8212; RoadAnalytics TBD documentation</title>
+    <title>2. Data sources &#8212; RoadAnalytics TBD documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -32,8 +32,8 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Using this software" href="use_instructions.html" />
-    <link rel="prev" title="3. Travel model" href="travel_modelling.html" />
+    <link rel="next" title="3. Travel model" href="travel_modelling.html" />
+    <link rel="prev" title="1. Analytics models" href="build_analytics_model.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -74,8 +74,8 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="data_sources.html">
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
   2. Data sources
  </a>
 </li>
@@ -86,8 +86,8 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
- <a class="current reference internal nav-link" href="#">
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="concepts.html">
   4. General concepts
  </a>
 </li>
@@ -151,20 +151,23 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#step-models">
-   4.1. 4-step models
+  <a class="reference internal nav-link" href="#road-network">
+   2.1. Road network
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#aequilibrae">
-     4.1.1. AequilibraE
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#road-networks-model">
-   4.2. Road Networks model
+  <a class="reference internal nav-link" href="#point-of-interest">
+   2.2. Point-of-Interest
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#population">
+   2.3. Population
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#commuting-zones">
+   2.4. Commuting Zones
   </a>
  </li>
 </ul>
@@ -188,21 +191,59 @@
               
               <div>
                 
-  <section id="general-concepts">
-<span id="concepts"></span><h1><span class="section-number">4. </span>General concepts<a class="headerlink" href="#general-concepts" title="Permalink to this headline">#</a></h1>
-<section id="step-models">
-<h2><span class="section-number">4.1. </span>4-step models<a class="headerlink" href="#step-models" title="Permalink to this headline">#</a></h2>
-<section id="aequilibrae">
-<span id="id1"></span><h3><span class="section-number">4.1.1. </span>AequilibraE<a class="headerlink" href="#aequilibrae" title="Permalink to this headline">#</a></h3>
-<p>AequilibraE is the first comprehensive Python package for transportation
-modeling, and it aims to provide all the resources not easily available from
-other open-source packages in the Python (NumPy, really) ecosystem.</p>
-<p>Comprehensive documentation is available in its <a class="reference external" href="http://aequilibrae.com/python/latest/">website</a>.</p>
+  <section id="data-sources">
+<span id="id1"></span><h1><span class="section-number">2. </span>Data sources<a class="headerlink" href="#data-sources" title="Permalink to this headline">#</a></h1>
+<p>To be included in the main portions of thisanalytics pipeline, all data sources
+have to fulfill the following requirements:</p>
+<ul class="simple">
+<li><p>Coverage: Since this pipeline is designed to be deployable for any country in
+the world, the data source must be available for the vast majority of
+countries on Earth.</p></li>
+<li><p>Openess: The data must be free, open and cannot impose excessive red-tape for
+its use</p></li>
+<li><p>Trustworthiness: The science and/or practices behind the development of
+data source must be technically transparent and robust, and have documented
+use in research and/or practice.</p></li>
+</ul>
+<section id="road-network">
+<h2><span class="section-number">2.1. </span>Road network<a class="headerlink" href="#road-network" title="Permalink to this headline">#</a></h2>
+<p>All the road network data is obtained directly from <a class="reference external" href="https://www.openstreetmap.org/">Open-Street Maps (OSM)</a>, which is the de-facto standard for
+open transportation network data. More information about it can be found on
+its <a class="reference external" href="https://www.openstreetmap.org/about">website</a>.</p>
 </section>
+<section id="point-of-interest">
+<h2><span class="section-number">2.2. </span>Point-of-Interest<a class="headerlink" href="#point-of-interest" title="Permalink to this headline">#</a></h2>
+<p>XXXXXXXXX INCLUDE DISCUSSION ON OSM DATA    XXXXXXXXXXXXXXXXXXXXXXXX</p>
 </section>
-<section id="road-networks-model">
-<h2><span class="section-number">4.2. </span>Road Networks model<a class="headerlink" href="#road-networks-model" title="Permalink to this headline">#</a></h2>
-<p>XXX</p>
+<section id="population">
+<h2><span class="section-number">2.3. </span>Population<a class="headerlink" href="#population" title="Permalink to this headline">#</a></h2>
+<p>There are currently two data sources of spatialized population that are suitable
+for use in this project.</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="https://dataforgood.facebook.com/dfg/tools/high-resolution-population-density-maps">Meta High Resolution Population density Maps</a></p></li>
+<li><p><a class="reference external" href="https://www.worldpop.org/about">World Pop</a></p></li>
+</ol>
+<p>Both data sources provide population estimates at a very high resolution (down
+to a grid of 100x100m) and are based on extensive research and offer similar
+results at more aggregate levels (small cities or neighborhoods within a large
+city), so they are equivalent for the purposes of this analytics pipeline.</p>
+<p>However, the World Pop data includes estimates with finer detail with respect
+to population per age bracket, which can be crucial when analyzing access to
+hospital infrastructure, schools and the labor market, so we have decided
+to use that data source.</p>
+<p>The <a class="reference external" href="https://www.github/pedrocamargo/road_analytics/blob/main/model/population/all_raster_pop_age_and_sex_source.csv">list of links for download</a>
+while the data for the total population is listed on a
+<a class="reference external" href="https://www.github/pedrocamargo/road_analytics/blob/main/model/population/all_raster_pop_source.csv">separate file</a>.</p>
+<p>All the data is downloaded from the <a class="reference external" href="https://data.humdata.org/">Humanitarian Data Exchange</a>, which provides a convenient interface for data
+download.</p>
+</section>
+<section id="commuting-zones">
+<h2><span class="section-number">2.4. </span>Commuting Zones<a class="headerlink" href="#commuting-zones" title="Permalink to this headline">#</a></h2>
+<p>The Commuting zones dataset provided by Meta consists of identifying areas
+within which people live and work, which is extremely relevant for providing
+reference values for our transportation demand model, as discussed in the
+corresponding section.</p>
+<p>Data documentation can be found on its <a class="reference external" href="https://dataforgood.facebook.com/dfg/tools/commuting-zones">website</a>.</p>
 </section>
 </section>
 
@@ -212,17 +253,17 @@ other open-source packages in the Python (NumPy, really) ecosystem.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="travel_modelling.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="build_analytics_model.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title"><span class="section-number">3. </span>Travel model</p>
+            <p class="prev-next-title"><span class="section-number">1. </span>Analytics models</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="use_instructions.html" title="next page">
+    <a class='right-next' id="next-link" href="travel_modelling.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Using this software</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Travel model</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
