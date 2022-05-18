@@ -4,7 +4,7 @@ Analytics models
 ================
 
 This group of notebooks creates the backbone of the analytics pipeline, as it
-builts road network models from `Open-Street aps (OSM)
+builts road network models from `Open-Street Maps (OSM)
 <https://www.openstreetmap.org/>`_ data and incorporates population information
 from the raster layers available at the  `Humanitarian Data Exchange
 <https://data.humdata.org/>`_.
