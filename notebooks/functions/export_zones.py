@@ -3,18 +3,15 @@ from shapely.ops import polygonize
 import pandas as pd
 import sqlite3
 
-def export_zones(zoning, project):
+def export_zones(zone_data, project):
     
-    for index, row in zoning.iterrows():
-
-        project.conn.execute('CREATE TABLE IF NOT EXISTS zoning_pop("zone_id" INTEGER, "state" TEXT, "population" FLOAT,\
-                                                            "final_zone_id" INTEGER);')
-        project.conn.execute("SELECT AddGeometryColumn( 'zoning_pop', 'geometry', 4326, 'MULTIPOLYGON', 'XY' );")
-        project.conn.execute("SELECT CreateSpatialIndex( 'zoning_pop' , 'geometry' );")
-        project.conn.commit()
-
-        project.conn.execute('INSERT into zoning_pop(zone_id, state, geometry, population, final_zone_id)\
-                                  VALUES(?, ?, GeomFromWKB(?, 4326), ?, ?);',
-                                 [index, row['state'], MultiPolygon(polygonize(row['geometry'])).wkb, 
-                                  row['population'], row['final_zone_id']])
-        project.conn.commit()
+    zoning = project.zoning
+    for zone_id, row in zone_data.iterrows():
+        zone = zoning.new(zone_id)
+        zone.geometry = row.geometry
+        zone.population = row.population
+        zone.save()
+        # None means that the centroid will be added in the geometric point of the zone
+        # But we could provide a Shapely point as an alternative
+        zone.add_centroid(False)
+        zone.connect_mode(mode_id="c", connectors=1)

@@ -6,10 +6,5 @@ import geopandas as gpd
 
 def load_hexbins(project):
     
-    hexbins_file = [x for x in project.conn.execute('SELECT hex_bins, state, x, y, asBinary(geometry), population\
-                                                     FROM hex_pop;')]
-    hexbins = pd.DataFrame(hexbins_file, columns=['hex_id', 'state', 'x', 'y', 'geometry', 'population'])
-    hexbins['geometry'] = hexbins['geometry'].apply(lambda x:shapely.wkb.loads(x))
-    hexbins = gpd.GeoDataFrame(hexbins, geometry='geometry')
-    
-    return hexbins
+    sql = "SELECT hex_id, country_subdivision, x, y, Hex(ST_AsBinary(GEOMETRY)) geometry, population FROM hex_pop;"
+    return gpd.GeoDataFrame.from_postgis(sql, project.conn, geom_col="geometry", crs=4326)
