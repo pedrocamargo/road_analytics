@@ -68,7 +68,9 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
     pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
     zoning = zoning.join(pop_total)
     
-    while zoning[zoning.geometry.type=='MultiPolygon'].shape[0] > 0:
+    exceptions = 0
+    while zoning[zoning.geometry.type=='MultiPolygon'].shape[0] > exceptions:
+        print(1)
         for zid, record in zoning[zoning.geometry.type=='MultiPolygon'].iterrows():
             zone_df = df[df.zone_id==zid]
             with warnings.catch_warnings():
@@ -77,6 +79,7 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
             island_pop = {isl:zone_df[adj_mtx.component_labels==isl].population.sum() for isl in islands}
             max_island = max(island_pop.values())
             remove_islands = [k for k, v in island_pop.items() if v < max_island]
+            failed = 0
             for rmv in remove_islands:
                 island_hexbins = zone_df[adj_mtx.component_labels == rmv].hex_id
                 if zone_df[df.hex_id.isin(island_hexbins)].population.sum() > min_zone_size:
@@ -88,11 +91,14 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
                 for island_geo in zone_df[adj_mtx.component_labels == rmv].geometry.values:
                     closeby.extend([x[1] for x in df.sindex.nearest(island_geo, 6)])
                 closeby = list(set(list(closeby)))
-                closeby = list(set(closeby))
                 if not closeby:
+                    failed = 1
                     continue
                 adjacent = df.loc[df.index.isin(closeby),:]
                 available = [x for x in adjacent.zone_id.unique() if x != zid]
+                if not available:
+                    failed = 1
+                    continue
 
                 same_area = [av for av in available if adjacent.loc[adjacent.zone_id==av, 'country_subdivision'].values[0] == record.country_subdivision]
                 if same_area:
@@ -100,9 +106,10 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
                 else:
                     counts = adjacent[adjacent.zone_id!=zid].groupby(['zone_id']).count()
                     counts = list(counts[counts.hex_id==counts.hex_id.max()].index)[0]
+
                     df.loc[df.hex_id.isin(island_hexbins), 'country_subdivision'] = adjacent.loc[adjacent.zone_id==counts, 'country_subdivision'].values[0]
-                    #f.loc[df.hex_id.isin(island_hexbins), 'province'] = adjacent.loc[adjacent.zone_id==counts, 'province'].values[0]
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = counts
+            exceptions +=failed
 
         zoning=df.dissolve(by='zone_id')[['country_subdivision', 'geometry']]
         pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
