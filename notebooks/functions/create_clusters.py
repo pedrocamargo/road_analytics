@@ -7,7 +7,7 @@ import sqlite3
 import numpy as np
 import libpysal
 
-def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
+def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
     
     """
     This function creates population clusters by state. 
@@ -85,8 +85,9 @@ def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
                     continue
 
                 closeby = []
-                for island_geo in zone_df[adj_mtx.component_labels == rmv].geometry:
-                    closeby.extend([x for x in df.sindex.nearest(island_geo.bounds, 6)])
+                for island_geo in zone_df[adj_mtx.component_labels == rmv].geometry.values:
+                    closeby.extend([x[1] for x in df.sindex.nearest(island_geo, 6)])
+                closeby = list(set(list(closeby)))
                 closeby = list(set(closeby))
                 if not closeby:
                     continue
@@ -97,9 +98,8 @@ def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
                 if same_area:
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = same_area[0]
                 else:
-                    counts = adjacent.groupby(['zone_id']).count()
-                    counts = list(counts[counts.hex_id==counts.hex_id.max()].index)
-                    counts = [x for x in counts if x != zid][0]
+                    counts = adjacent[adjacent.zone_id!=zid].groupby(['zone_id']).count()
+                    counts = list(counts[counts.hex_id==counts.hex_id.max()].index)[0]
                     df.loc[df.hex_id.isin(island_hexbins), 'country_subdivision'] = adjacent.loc[adjacent.zone_id==counts, 'country_subdivision'].values[0]
                     #f.loc[df.hex_id.isin(island_hexbins), 'province'] = adjacent.loc[adjacent.zone_id==counts, 'province'].values[0]
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = counts
