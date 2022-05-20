@@ -14,13 +14,13 @@ def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
     """
     
     hexbins['zone_id'] = -1
-    list_states = list(hexbins.state.unique())
+    list_states = list(hexbins.country_subdivision.unique())
     data_store = []
     master_zone_id = 1
-    for i, state in enumerate(list_states):
-        df = hexbins[hexbins.state==state].copy()
+    for i, country_subdivision in enumerate(list_states):
+        df = hexbins[hexbins.country_subdivision==country_subdivision].copy()
         df.loc[:, 'zone_id'] = master_zone_id + i
-        data_store.append(df[['hex_id', 'x', 'y', 'population', 'state', 'zone_id']])
+        data_store.append(df[['hex_id', 'x', 'y', 'population', 'country_subdivision', 'zone_id']])
     
     for cnt, df in enumerate(data_store):
         t = df.groupby(['zone_id']).sum()
@@ -61,10 +61,10 @@ def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
                 print(f'Queue for analysis: {zones_to_break} (Done: {ready} ({avg} people/zone))')
 
     df = pd.concat(data_store)[['hex_id', 'zone_id']]
-    df = pd.merge(hexbins[['hex_id', 'x', 'y', 'population', 'state', 'geometry']], df, on='hex_id')
-    df = gpd.GeoDataFrame(df[['hex_id', 'x', 'y', 'population', 'state', 'zone_id']], geometry=df['geometry'])
+    df = pd.merge(hexbins[['hex_id', 'x', 'y', 'population', 'country_subdivision', 'geometry']], df, on='hex_id')
+    df = gpd.GeoDataFrame(df[['hex_id', 'x', 'y', 'population', 'country_subdivision', 'zone_id']], geometry=df['geometry'])
 
-    zoning=df.dissolve(by='zone_id')[['state', 'geometry']]
+    zoning=df.dissolve(by='zone_id')[['country_subdivision', 'geometry']]
     pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
     zoning = zoning.join(pop_total)
     
@@ -93,22 +93,22 @@ def create_clusters(hexbins, max_zone_size=10_000, min_zone_size=500):
                 adjacent = df.loc[df.index.isin(closeby),:]
                 available = [x for x in adjacent.zone_id.unique() if x != zid]
 
-                same_area = [av for av in available if adjacent.loc[adjacent.zone_id==av, 'state'].values[0] == record.state]
+                same_area = [av for av in available if adjacent.loc[adjacent.zone_id==av, 'country_subdivision'].values[0] == record.country_subdivision]
                 if same_area:
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = same_area[0]
                 else:
                     counts = adjacent.groupby(['zone_id']).count()
                     counts = list(counts[counts.hex_id==counts.hex_id.max()].index)
                     counts = [x for x in counts if x != zid][0]
-                    df.loc[df.hex_id.isin(island_hexbins), 'state'] = adjacent.loc[adjacent.zone_id==counts, 'state'].values[0]
+                    df.loc[df.hex_id.isin(island_hexbins), 'country_subdivision'] = adjacent.loc[adjacent.zone_id==counts, 'country_subdivision'].values[0]
                     #f.loc[df.hex_id.isin(island_hexbins), 'province'] = adjacent.loc[adjacent.zone_id==counts, 'province'].values[0]
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = counts
 
-        zoning=df.dissolve(by='zone_id')[['state', 'geometry']]
+        zoning=df.dissolve(by='zone_id')[['country_subdivision', 'geometry']]
         pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
         zoning = zoning.join(pop_total)
 
-    zoning=df.dissolve(by='zone_id')[['state', 'geometry']]
+    zoning=df.dissolve(by='zone_id')[['country_subdivision', 'geometry']]
     pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
     zoning = zoning.join(pop_total)
     

@@ -16,6 +16,14 @@ changes to the transportation network.
 
 Performs all the data import
 
+Quick summary statistics on the road model can be seen explored:
+[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_case-Descriptive_analytics_ROADS.ipynb)
+
+Quick summary statistics on the population data loaded can also be seen explored:
+[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_case-Descriptive_analytics_POPULATION.ipynb)
+
+
+
 ### 1.1 Importing the OSM network
 
 **In a nutshell**: Imports the OSM network into a computationally-efficient 
@@ -23,9 +31,6 @@ format
 
 We can see the imported result on a browser 
 [VISUALIZE IT! (it may take time to open)](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.1_Build_model_from_OSM.ipynb)
-
-We can quickly compute network statistics at this point
-[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_cases/1.Descriptive_analytics.ipynb)
 
 ### 1.2 Importing Population data
 
@@ -39,13 +44,13 @@ a vector format
 
 A heatmap shows the distribution of the population [VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.2.1_Vectorizing_population.ipynb)
 
-#### 1.2.2 Aggregating population 
+#### 1.2.2 Aggregating population into analysis zones
 
 **In a nutshell**: Aggregates population data into analysis zones
 with geographic resolution proportional to population density
 
-This jupyter notebook includes a choropleth map with the population of
-each zone and can visualized -> **UNDER DEVELOPMENT**
+[VISUALIZE IT!](https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.2.2_Population into hex and clustering.ipynb)
+
 
 ### 1.3 Importing Point-of-Interest data
 
