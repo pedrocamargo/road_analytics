@@ -12,6 +12,7 @@ def export_zones(zone_data, project):
     if min_node<=max_zone:
         increment = project.conn.execute('Select max(node_id) from nodes').fetchone()[0] + 1
         project.conn.execute('update nodes set node_id =node_id + ?', [increment])
+        project.conn.commit()
     
     zoning = project.zoning
     for zone_id, row in zone_data.iterrows():
