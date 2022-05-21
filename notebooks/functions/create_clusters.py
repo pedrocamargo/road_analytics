@@ -119,4 +119,7 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
     pop_total = df[['zone_id', 'population']].groupby(['zone_id']).sum()['population']
     zoning = zoning.join(pop_total)
     
+    
+    zoning = zoning.reset_index(drop=True)
+    zoning.index += 1
     return zoning

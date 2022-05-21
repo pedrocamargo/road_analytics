@@ -2,6 +2,8 @@ import geopandas as gpd
 import sqlite3
 from os.path import join
 from geopandas.tools import sjoin
+import gc
+
 
 def zones_with_population(project, zones_from_locations):
     
@@ -9,7 +11,9 @@ def zones_with_population(project, zones_from_locations):
     sql = "SELECT population, Hex(ST_AsBinary(GEOMETRY)) as geom FROM raw_population;"
     pop_data = gpd.GeoDataFrame.from_postgis(sql, project.conn, geom_col="geom", crs=4326)
     
-    pop_to_zone = sjoin(pop_data, zones_from_locations, how="left", predicate="within")
+    pop_to_zone = sjoin(pop_data, zones_from_locations, how="left")
+    pop_to_zone = pop_to_zone[['hex_id', 'population']]
+    gc.collect()
     
     pop_per_zone = pop_to_zone.groupby(['hex_id']).sum()[['population']].reset_index()
     pop_per_zone.loc[:, 'hex_id'] = pop_per_zone.hex_id.astype(int)
