@@ -6,7 +6,7 @@ from tempfile import gettempdir
 
 from functions.country_borders import get_country_borders
 
-def select_rural_areas(country_name:str):
+def select_urban_areas(country_name:str):
     
     url = r'https://github.com/pedrocamargo/road_analytics/releases/download/v0.1/global_urban_extent.gpkg'
     
@@ -22,6 +22,4 @@ def select_rural_areas(country_name:str):
     
     urban_areas = gpd.read_file(url, mask=country_borders)
     
-    rural_areas = gdf.overlay(urban_areas, how='symmetric_difference')
-    
-    return rural_areas
+    return urban_areas
