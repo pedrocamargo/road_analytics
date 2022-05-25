@@ -4,9 +4,9 @@ import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
 
-from functions.country_borders import get_country_borders
+from ..country_main_area import get_main_area
 
-def select_urban_areas(country_name:str):
+def select_urban_areas(project):
     
     url = r'https://github.com/pedrocamargo/road_analytics/releases/download/v0.1/global_urban_extent.gpkg'
     
@@ -15,9 +15,9 @@ def select_urban_areas(country_name:str):
     if not isfile(dest_path):
         urllib.request.urlretrieve(url, dest_path)
     
-    country_borders = get_country_borders(country_name)
+    country_borders = get_main_area(project)
     
-    gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), geometry='geometry')
+    gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), geometry='geometry', crs=4326)
     
     urban_areas = gpd.read_file(url, mask=country_borders)
     

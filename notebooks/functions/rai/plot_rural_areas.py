@@ -4,7 +4,10 @@ from matplotlib import colors as mcolors
 
 def plot_rural_areas(rural_areas):
     
-    fig, ax = plt.subplots(constrained_layout=False, frameon=False, figsize=(10,8))
+    fig, ax = plt.subplots(constrained_layout=False, frameon=False, figsize=(20,20))
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    
     
     rural_areas.plot(ax=ax, color='#5f8065', linewidth=0.4, edgecolor='black')
 

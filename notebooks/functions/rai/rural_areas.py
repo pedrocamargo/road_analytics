@@ -3,10 +3,10 @@ import pandas as pd
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
+import shapely.wkb
 
-from functions.country_borders import get_country_borders
 
-def select_rural_areas(country_name:str):
+def select_rural_areas(project):
     
     url = r'https://github.com/pedrocamargo/road_analytics/releases/download/v0.1/global_urban_extent.gpkg'
     
@@ -15,10 +15,11 @@ def select_rural_areas(country_name:str):
     if not isfile(dest_path):
         urllib.request.urlretrieve(url, dest_path)
     
-    country_borders = get_country_borders(country_name)
     
-    gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), 
-                           geometry='geometry')
+    country_wkb = project.conn.execute('Select asBinary(geometry) from country_borders').fetchone()[0]
+    country_borders = shapely.wkb.loads(country_wkb)
+        
+    gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), geometry='geometry', crs=4326)
     
     urban_areas = gpd.read_file(url, mask=country_borders)
     
