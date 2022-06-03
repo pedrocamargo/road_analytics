@@ -44,7 +44,7 @@ class Model:
         import_net_from_osm(self._project, self.__model_place)
 
     def import_subdivisions(self, subdivisions=2, overwrite=False):
-        """XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        """Imports political subdivisions.
 
          Args:
                 *subdivisions* (:obj:`int`): Number of subdivision levels to import. Defaults to 2
@@ -64,7 +64,11 @@ class Model:
         zone_builder(self._project, hexbin_size, max_zone_pop)
 
     def get_political_subdivisions(self, level: int = None) -> gpd.GeoDataFrame:
-        """XXXXXXXXXXXXXXXXXX"""
+        """XXXXXXXXXXXXXXXXXX
+        
+        Args: 
+             *level*(:obj:`int`): Number of subdivision levels to import. Default imports all levels.
+        """
 
         subd = subdivisions(self._project)
         if level is not None:

@@ -1,11 +1,13 @@
+import io
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
-
+import zipfile
 import numpy as np
 import pandas as pd
 import rasterio
 from aequilibrae.project import Project
+import requests
 from scipy.sparse import coo_matrix
 
 from gpbp.data.population_file_address import population_source
@@ -18,17 +20,26 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     """
 
     #TODO: IMPLEMENT THE SOURCE AND OVERWRITE FEATURES
+    url = population_source(model_place, source)
 
-    url = population_source(model_place)
-    dest_path = join(gettempdir(), f"pop_{model_place}.tif")
-    if not isfile(dest_path):
-        urllib.request.urlretrieve(url, dest_path)
+    if source == 'WorldPop':    
+        dest_path = join(gettempdir(), f"pop_{model_place}.tif")
+        if not isfile(dest_path):
+            urllib.request.urlretrieve(url, dest_path)
+        dataset = rasterio.open(dest_path)
+    elif source == 'Meta':
+        r = requests.get(url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        filename = z.namelist()[0]
+        var = z.extract(filename)
+        dataset = rasterio.open(var)
+    else:
+        print('Non-existing source.')
 
     project.conn.execute('Drop table if exists raw_population')
     project.conn.commit()
     main_area = get_main_area(project)
-
-    dataset = rasterio.open(dest_path)
+    
     minx, miny, maxx, maxy = main_area.bounds
     width = dataset.width
     height = dataset.height
