@@ -1,35 +1,33 @@
-from shapely.geometry.polygon import Polygon
-import numpy as np
-import pandas as pd
-from scipy.sparse import coo_matrix
-import rasterio
-from aequilibrae.project import Project
-from .country_main_area import get_main_area
-import geopandas as gpd
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
 
+import numpy as np
+import pandas as pd
+import rasterio
+from aequilibrae.project import Project
+from scipy.sparse import coo_matrix
+
+from gpbp.data.population_file_address import population_source
+from notebooks.functions.country_main_area import get_main_area
 
 
-def pop_to_model(project: Project, model_place:str):
-    '''
+def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrite=True):
+    """
         Function to process raster images in Python
-    '''
+    """
 
-    
-    pop_path = f'../model/population/all_raster_pop_source.csv'
-    df = pd.read_csv(pop_path)
-    url = df[df.Country.str.upper()==model_place.upper()].data_link.values[0]
+    #TODO: IMPLEMENT THE SOURCE AND OVERWRITE FEATURES
+
+    url = population_source(model_place)
     dest_path = join(gettempdir(), f"pop_{model_place}.tif")
     if not isfile(dest_path):
         urllib.request.urlretrieve(url, dest_path)
 
-    
     project.conn.execute('Drop table if exists raw_population')
     project.conn.commit()
     main_area = get_main_area(project)
-    
+
     dataset = rasterio.open(dest_path)
     minx, miny, maxx, maxy = main_area.bounds
     width = dataset.width
@@ -41,17 +39,17 @@ def pop_to_model(project: Project, model_place:str):
     dx = x_max - x_min
     dy = y_max - y_min
     x_size, y_size = dataset.res
-    
+
     # Computes the  X and Y indices for the XY grid that will represent our raster
     y_idx = []
     for row in range(height):
-        y = row * (-y_size) + y_max + (y_size / 2)  #to centre the point
+        y = row * (-y_size) + y_max + (y_size / 2)  # to centre the point
         y_idx.append(y)
     y_idx = np.array(y_idx)
 
     x_idx = []
     for col in range(width):
-        x = col * x_size + x_min + (x_size / 2)  #add half the cell size
+        x = col * x_size + x_min + (x_size / 2)  # add half the cell size
         x_idx.append(x)
     x_idx = np.array(x_idx)
 
@@ -64,12 +62,10 @@ def pop_to_model(project: Project, model_place:str):
     df = df.loc[df.population >= 0, :]  # Pixels outside the modeled area have negative values
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
-    
-    
+
     conn = project.conn
     df.to_sql('raw_population', conn, if_exists='replace', index=False)
     conn.execute("select AddGeometryColumn( 'raw_population', 'geometry', 4326, 'POINT', 'XY', 1);")
     conn.execute("UPDATE raw_population SET Geometry=MakePoint(longitude, latitude, 4326)")
     conn.execute("SELECT CreateSpatialIndex( 'raw_population' , 'geometry' );")
     conn.commit()
-    
