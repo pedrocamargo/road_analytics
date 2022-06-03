@@ -1,11 +1,14 @@
 import logging
 import sys
 
-from aequilibrae import logger, Project, Parameters
+import geopandas as gpd
+from aequilibrae import logger, Project
 
+from gpbp.data_retrieval import subdivisions
 from gpbp.model_creation.import_from_osm import import_net_from_osm
 from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
+from gpbp.model_creation.zoning.zone_building import zone_builder
 
 
 class Model:
@@ -16,7 +19,7 @@ class Model:
         self.__model_place = model_place
         self.__population_source = 'WorldPop'
         self.__folder = network_path
-        self.__project = Project()
+        self._project = Project()
         self.__starts_logging()
 
     def create(self):
@@ -25,7 +28,6 @@ class Model:
         self.import_network()
         self.import_population()
         self.import_subdivisions(2, True)
-        self.import_population(True)
         self.build_zoning()
 
     def set_population_source(self, source='WorldPop'):
@@ -37,9 +39,9 @@ class Model:
 
     def import_network(self):
         """Triggers the import of the network from OSM and adds subdivisions into the model """
-        self.__project.new(self.__folder)
+        self._project.new(self.__folder)
 
-        import_net_from_osm(self.__project, self.__model_place)
+        import_net_from_osm(self._project, self.__model_place)
 
     def import_subdivisions(self, subdivisions=2, overwrite=False):
         """XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -49,16 +51,25 @@ class Model:
                 *overwrite* (:obj:`bool`): Deletes pre-existing subdivisions. Defaults to False
 
         """
-        add_subdivisions_to_model(self.__project, self.__model_place, subdivisions, overwrite)
+        add_subdivisions_to_model(self._project, self.__model_place, subdivisions, overwrite)
 
     def import_population(self, overwrite=False):
         """Triggers the import of population from raster into the model"""
 
-        pop_to_model(self.__project, self.__model_place, self.__population_source, overwrite)
+        pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000):
         """TODO: DOCUMENT THIS METHOD AND TIE IT UP TO THE ACTUAL FUNCTION"""
-        pass
+
+        zone_builder(self._project, hexbin_size, max_zone_pop)
+
+    def get_political_subdivisions(self, level: int = None) -> gpd.GeoDataFrame:
+        """XXXXXXXXXXXXXXXXXX"""
+
+        subd = subdivisions(self._project)
+        if level is not None:
+            subd = subd[subd.level == level]
+        return subd
 
     @property
     def place(self):
