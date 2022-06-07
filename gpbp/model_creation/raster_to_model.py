@@ -74,6 +74,7 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
 
+    
     conn = project.conn
     df.to_sql('raw_population', conn, if_exists='replace', index=False)
     conn.execute("select AddGeometryColumn( 'raw_population', 'geometry', 4326, 'POINT', 'XY', 1);")

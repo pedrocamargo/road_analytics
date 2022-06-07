@@ -46,3 +46,6 @@ def population_source(model_place: str, source='WorldPop'):
             ValueError('No population file found.')
 
         return downloadable_file
+
+    else:
+        ValueError("No population file found.")
