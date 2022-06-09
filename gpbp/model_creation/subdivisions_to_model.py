@@ -1,4 +1,7 @@
 from aequilibrae import Project
+import geopandas as gpd
+import sqlite3
+from os.path import join
 
 from gpbp.model_creation.country_subdivisions import get_subdivisions
 
@@ -10,11 +13,21 @@ def add_subdivisions_to_model(project: Project, model_place: str, levels_to_add=
     # Setup the addition of subdivisions up to the desired level
     # TODO: Add the overwrite feature so we just skip the function if subdivisions already exist
 
-    gdf = get_subdivisions(model_place)
+    gdf = get_subdivisions(model_place, levels_to_add)
 
     if gdf.shape[0] == 0:
-        return
+        return #Adicionar um ValueError aqui?
 
+    #Check if subdivisions already exists otherwise create a file with this name
+    conn = sqlite3.connect(join("project_database.sqlite")) # aqui
+    all_tables = [x[0] for x in conn.execute("SELECT name FROM sqlite_master WHERE type ='table'").fetchall()]
+
+    if overwrite == True and 'country_subdivisions' not in all_tables:
+        overwrite_subdivisions(project, model_place, gdf)
+    else:
+        pass
+
+def overwrite_subdivisions(project, model_place, gdf):
     project.conn.execute('Drop TABLE IF EXISTS country_subdivisions;')
     project.conn.execute(
         'CREATE TABLE IF NOT EXISTS country_subdivisions("country_name" TEXT, "division_name" TEXT, "level" INTEGER);')

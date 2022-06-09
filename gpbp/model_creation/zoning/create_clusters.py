@@ -7,7 +7,7 @@ import sqlite3
 import numpy as np
 import libpysal
 
-def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
+def create_clusters(hexbins, max_zone_pop=10000, min_zone_pop=500):
     
     """
     This function creates population clusters by state. 
@@ -24,7 +24,7 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
     
     for cnt, df in enumerate(data_store):
         t = df.groupby(['zone_id']).sum()
-        t = t.loc[t.population>max_zone_size]
+        t = t.loc[t.population>max_zone_pop]
         zone_sizes = t['population'].to_dict()
         zones_to_break = len(zone_sizes)
         counter = 0
@@ -37,10 +37,10 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
             zone_to_analyze = min(zone_sizes)
             zone_pop = zone_sizes.pop(zone_to_analyze)
             zones_to_break -= 1
-            if zone_pop < max_zone_size:
+            if zone_pop < max_zone_pop:
                 continue
             fltr = df.zone_id==zone_to_analyze
-            segments = max(2, ceil(sqrt(zone_pop/max_zone_size)))
+            segments = max(2, ceil(sqrt(zone_pop/max_zone_pop)))
             prov_pop = df.loc[fltr, :]
             segments = min( prov_pop.shape[0], segments)
             if prov_pop.shape[0] < 2:
@@ -51,9 +51,9 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
             df.loc[fltr, 'zone_id'] = centr_results[:] + master_zone_id
 
             t = df.groupby(['zone_id']).sum()
-            ready= t.loc[t.population<=max_zone_size].shape[0]
-            avg = int(np.nansum(t.loc[t.population<=max_zone_size, 'population'])/max(1, ready))
-            t = t.loc[t.population>max_zone_size]
+            ready= t.loc[t.population<=max_zone_pop].shape[0]
+            avg = int(np.nansum(t.loc[t.population<=max_zone_pop, 'population'])/max(1, ready))
+            t = t.loc[t.population>max_zone_pop]
             zone_sizes = t['population'].to_dict()
             zones_to_break = len(zone_sizes)
             master_zone_id += segments + 1
@@ -82,7 +82,7 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
             failed = 0
             for rmv in remove_islands:
                 island_hexbins = zone_df[adj_mtx.component_labels == rmv].hex_id
-                if zone_df[df.hex_id.isin(island_hexbins)].population.sum() > min_zone_size:
+                if zone_df[df.hex_id.isin(island_hexbins)].population.sum() > min_zone_pop:
                     df.loc[df.hex_id.isin(island_hexbins),'zone_id'] = master_zone_id
                     master_zone_id += 1
                     continue
@@ -122,4 +122,5 @@ def create_clusters(hexbins, max_zone_size=10000, min_zone_size=500):
     
     zoning = zoning.reset_index(drop=True)
     zoning.index += 1
+    
     return zoning

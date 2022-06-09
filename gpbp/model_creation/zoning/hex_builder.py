@@ -20,7 +20,6 @@ def hex_builder(coverage_area, hex_height, epsg=3857):
     x_spacing = xvertexlo + xvertexhi
 
     poly_id = 1
-    poly_centroids = []
     t = perf_counter()
     threshold = 5000000
     tot_elements = int(floor(float(x_right - x_left) / x_spacing)) * int(floor(float(y_top - y_bottom) / hex_height))
@@ -75,4 +74,5 @@ def hex_builder(coverage_area, hex_height, epsg=3857):
 
     df = pd.concat(results)
     df.loc[:, 'hex_id'] = np.arange(df.shape[0]) + 1
+    
     return df

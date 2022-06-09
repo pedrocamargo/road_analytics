@@ -9,14 +9,14 @@ def zones_with_location(hexb, all_subdivisions):
     
     states = all_subdivisions[all_subdivisions.level== all_subdivisions.level.max()]
     
-    data = sjoin(centroids, states, how="left", predicate="intersects") #relace district by state
+    data = sjoin(centroids, states, how="left", predicate="intersects") #replace district by state
     data.drop_duplicates(subset=['hex_id'], inplace=True) 
     data = data[['hex_id','division_name', 'geometry']] #remove district
     found_centroid = data[['hex_id', 'division_name']] #remove district
     found_centroid = found_centroid.dropna()
     
     not_found = hexb[~hexb.hex_id.isin(found_centroid.hex_id)]
-    not_found_merged = sjoin(not_found, states, how="left", predicate="intersects")  #relace district by state
+    not_found_merged = sjoin(not_found, states, how="left", predicate="intersects")  #replace district by state
     not_found_merged = not_found_merged[['hex_id','division_name_left']] #replace district
     not_found_merged.dropna(inplace=True)
     not_found_merged = not_found_merged.rename(columns={'division_name_left':'division_name'})

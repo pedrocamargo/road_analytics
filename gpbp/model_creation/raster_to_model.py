@@ -6,6 +6,7 @@ import zipfile
 import numpy as np
 import pandas as pd
 import rasterio
+from sqlalchemy import over
 from aequilibrae.project import Project
 import requests
 from scipy.sparse import coo_matrix
@@ -36,8 +37,6 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     else:
         print('Non-existing source.')
 
-    project.conn.execute('Drop table if exists raw_population')
-    project.conn.commit()
     main_area = get_main_area(project)
     
     minx, miny, maxx, maxy = main_area.bounds
@@ -74,7 +73,14 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
 
-    
+    if overwrite == False:
+        overwrite_population(project, df)
+    else:
+        pass
+
+def overwrite_population(project, df):
+    project.conn.execute('Drop table if exists raw_population')
+    project.conn.commit()  
     conn = project.conn
     df.to_sql('raw_population', conn, if_exists='replace', index=False)
     conn.execute("select AddGeometryColumn( 'raw_population', 'geometry', 4326, 'POINT', 'XY', 1);")

@@ -1,3 +1,4 @@
+from asyncio import set_child_watcher
 import logging
 import sys
 
@@ -7,6 +8,7 @@ from aequilibrae import logger, Project
 from gpbp.data_retrieval import subdivisions
 from gpbp.model_creation.import_from_osm import import_net_from_osm
 from gpbp.model_creation.raster_to_model import pop_to_model
+from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
 from gpbp.model_creation.zoning.zone_building import zone_builder
 
@@ -35,7 +37,7 @@ class Model:
          Args:
                 *source* (:obj:`str`): Can be 'WorldPop' or 'Meta'. Defaults to WorldPop
         """
-        pass
+        self.__population_source = set_source(source)
 
     def import_network(self):
         """Triggers the import of the network from OSM and adds subdivisions into the model """
@@ -59,12 +61,19 @@ class Model:
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000):
-        """TODO: DOCUMENT THIS METHOD AND TIE IT UP TO THE ACTUAL FUNCTION"""
+        """Creates hexagonal bins, and then clusters it regarding the political subdivision.
+
+        TODO: DOCUMENT THIS METHOD AND TIE IT UP TO THE ACTUAL FUNCTION
+        
+        Args:
+             *hexbin_size*(:obj:`int`): size of the hexagonal bins to be created.
+             *max_zone_pop*(:obj:`int`): max population living within a zone.
+        """
 
         zone_builder(self._project, hexbin_size, max_zone_pop)
 
     def get_political_subdivisions(self, level: int = None) -> gpd.GeoDataFrame:
-        """XXXXXXXXXXXXXXXXXX
+        """Return political subdivisions from a country. 
         
         Args: 
              *level*(:obj:`int`): Number of subdivision levels to import. Default imports all levels.
