@@ -42,10 +42,12 @@ def population_source(model_place: str, source='WorldPop'):
             downloadable_file = soup.find('a', {"title":f"{country_iso}_population_2020_geotiff.zip"}).parent.find_all('a')[1]['href']
         elif len(soup.body.findAll(text=f'population_{country_iso}_2018-10-01_geotiff.zip')) > 0:
             downloadable_file = soup.find('a', {"title":f"population_{country_iso}_2018-10-01_geotiff.zip"}).parent.find_all('a')[1]['href']
+        elif len(soup.body.findAll(text=f'population_{country_iso}.geotiff.zip')) > 0:
+            downloadable_file = soup.find('a', {"title":f"population_{country_iso}.geotiff.zip"}).parent.find_all('a')[1]['href']
         else:
-            ValueError('No population file found.')
+            raise ValueError('No population file found.')
 
         return downloadable_file
 
     else:
-        ValueError("No population source found.")
+        raise ValueError("No population source found.")

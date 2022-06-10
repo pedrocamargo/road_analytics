@@ -11,7 +11,8 @@ from shapely.geometry import Polygon
 def hex_builder(coverage_area, hex_height, epsg=3857):
     # Function adapted from http://michaelminn.com/linux/mmqgis/
 
-    x_right, x_left, y_top, y_bottom = coverage_area.unary_union.bounds
+    x_left, y_bottom, x_right, y_top = coverage_area.unary_union.bounds
+
     results = []
     data = []
     # To preserve symmetry, hspacing is fixed relative to vspacing
