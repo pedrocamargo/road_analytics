@@ -1,12 +1,14 @@
 import geopandas as gpd
+from gpbp.model_creation.zoning.export_hex_population import export_hex_population
 
-#from gpbp.model_creation.zoning.export_zones import export_zones
+from gpbp.model_creation.zoning.export_zones import export_zones
 from gpbp.model_creation.zoning.create_clusters import create_clusters
 from gpbp.model_creation.zoning.hex_builder import hex_builder
 from gpbp.model_creation.zoning.zones_with_location import zones_with_location
+from gpbp.model_creation.zoning.zones_with_pop import zones_with_population
 
 
-def zone_builder(project, hexbin_size: int, max_zone_pop: int):
+def zone_builder(project, hexbin_size: int, max_zone_pop: int, min_zone_pop: int, save_hexbins:bool):
     
     sql = "SELECT country_name, Hex(ST_AsBinary('geometry')) FROM country_borders"
     country = gpd.GeoDataFrame.from_postgis(sql, project.conn, geom_col="geometry", crs=4326)
@@ -20,7 +22,13 @@ def zone_builder(project, hexbin_size: int, max_zone_pop: int):
     
     zones_with_locations = zones_with_location(hexb, states)
 
-    clusters = create_clusters(zones_with_locations, max_zone_pop)
+    zones_with_pop = zones_with_population(project, zones_with_locations)
 
-    # Agora salvamos os clusters?
-    #export_zones(clusters, project)
+    if save_hexbins == True:
+        export_hex_population(project, zones_with_pop)
+    else:
+        pass
+
+    clusters = create_clusters(zones_with_locations, max_zone_pop, min_zone_pop)
+
+    export_zones(clusters, project)

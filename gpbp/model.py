@@ -41,6 +41,7 @@ class Model:
 
     def import_network(self):
         """Triggers the import of the network from OSM and adds subdivisions into the model """
+        
         self._project.new(self.__folder)
 
         import_net_from_osm(self._project, self.__model_place)
@@ -60,7 +61,7 @@ class Model:
 
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
-    def build_zoning(self, hexbin_size=200, max_zone_pop=10000):
+    def build_zoning(self, hexbin_size=200, max_zone_pop=10000, min_zone_pop=500, save_hexbins=True):
         """Creates hexagonal bins, and then clusters it regarding the political subdivision.
 
         TODO: DOCUMENT THIS METHOD AND TIE IT UP TO THE ACTUAL FUNCTION
@@ -68,9 +69,11 @@ class Model:
         Args:
              *hexbin_size*(:obj:`int`): size of the hexagonal bins to be created.
              *max_zone_pop*(:obj:`int`): max population living within a zone.
+             *min_zone_pop*(:obj:`int`): min population living within a zone.
+             *save_hexbins*(:obj:`bool`): saves the hexagonal bins with population. Defaults to True.
         """
 
-        zone_builder(self._project, hexbin_size, max_zone_pop)
+        zone_builder(self._project, hexbin_size, max_zone_pop, min_zone_pop, save_hexbins)
 
     def get_political_subdivisions(self, level: int = None) -> gpd.GeoDataFrame:
         """Return political subdivisions from a country. 

@@ -6,7 +6,7 @@ import zipfile
 import numpy as np
 import pandas as pd
 import rasterio
-from sqlalchemy import over
+#from sqlalchemy import over
 from aequilibrae.project import Project
 import requests
 from scipy.sparse import coo_matrix
@@ -19,8 +19,7 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     """
         Function to process raster images in Python
     """
-
-    #TODO: IMPLEMENT THE SOURCE AND OVERWRITE FEATURES
+    
     url = population_source(model_place, source)
 
     if source == 'WorldPop':    
@@ -73,7 +72,7 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
 
-    if overwrite == False:
+    if overwrite == False or source == 'Meta':
         overwrite_population(project, df)
     else:
         pass

@@ -19,7 +19,7 @@ def import_net_from_osm(project: Project, model_place: str):
 
     if place_geo.area == 0:
         # TODO: Add a huge warning here
-        return
+        return Warning('No country borders were imported.')
 
     project.conn.execute('CREATE TABLE IF NOT EXISTS country_borders("country_name" TEXT);')
     project.conn.execute("SELECT AddGeometryColumn( 'country_borders', 'geometry', 4326, 'MULTIPOLYGON', 'XY' );")
@@ -32,8 +32,8 @@ def import_net_from_osm(project: Project, model_place: str):
     project.conn.commit()
 
     sql = """DELETE from Links where link_id not in (SELECT a.link_id
-    FROM links AS a, country_borders as b
-    WHERE ST_Intersects(a.geometry, b.geometry) = 1)"""
+                                                     FROM links AS a, country_borders as b
+                                                     WHERE ST_Intersects(a.geometry, b.geometry) = 1)"""
 
     project.conn.execute(sql)
     project.conn.commit()
