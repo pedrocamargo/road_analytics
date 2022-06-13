@@ -63,8 +63,8 @@ class Model:
     def import_population(self, overwrite=False):
         """Triggers the import of population from raster into the model"""
 
-        trigger_population(self._project, self.__population_source)
-        
+        trigger_population(self._project)
+
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000, min_zone_pop=500, save_hexbins=True):
@@ -92,6 +92,12 @@ class Model:
         if level is not None:
             subd = subd[subd.level == level]
         return subd
+
+    def close_model(self):
+        """
+        Close the project model.
+        """
+        self._project.close()
 
     @property
     def place(self):

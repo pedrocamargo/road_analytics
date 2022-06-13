@@ -7,4 +7,4 @@ def set_source(source):
     elif source == 'Meta':
         return 'Meta'
     else:
-        return ValueError("No population source found.")
+        raise ValueError("No population source found.")

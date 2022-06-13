@@ -1,12 +1,14 @@
 import io
+from statistics import mode
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
 import zipfile
 import numpy as np
 import pandas as pd
+from psycopg2 import OperationalError
 import rasterio
-from sqlalchemy import over
+#rom sqlalchemy import over
 from aequilibrae.project import Project
 import requests
 from scipy.sparse import coo_matrix
@@ -15,11 +17,20 @@ from gpbp.data.population_file_address import population_source
 from notebooks.functions.country_main_area import get_main_area
 
 
-def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrite=True):
+def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrite=False):
     """
         Function to process raster images in Python
     """
     
+    if overwrite == True:
+        try:
+            'raw_population' in [x[0] for x in project.conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]
+            print('raw_population file already exists and will be overwritten.')
+        except OperationalError:
+            pass
+    else:
+        pass
+
     url = population_source(model_place, source)
 
     if source == 'WorldPop':    
@@ -72,12 +83,6 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     df = df[(df.longitude > minx) & (df.longitude < maxx) & (df.latitude > miny) & (df.latitude < maxy)]
     df.fillna(0, inplace=True)
 
-    if overwrite == False or source == 'Meta':
-        overwrite_population(project, df)
-    else:
-        pass
-
-def overwrite_population(project, df):
     project.conn.execute('Drop table if exists raw_population')
     project.conn.commit()  
     conn = project.conn
