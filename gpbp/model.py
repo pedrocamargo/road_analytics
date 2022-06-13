@@ -1,6 +1,7 @@
 from asyncio import set_child_watcher
 import logging
 import sys
+from fiona import prop_type
 
 import geopandas as gpd
 from aequilibrae import logger, Project
@@ -10,6 +11,8 @@ from gpbp.model_creation.import_from_osm import import_net_from_osm
 from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
+from gpbp.model_creation.trigger_network import trigger_network
+from gpbp.model_creation.trigger_population import trigger_population
 from gpbp.model_creation.zoning.zone_building import zone_builder
 
 
@@ -42,7 +45,8 @@ class Model:
     def import_network(self):
         """Triggers the import of the network from OSM and adds subdivisions into the model """
         
-        self._project.new(self.__folder)
+        #self._project.new(self.__folder)
+        trigger_network(self._project, self.__folder)
 
         import_net_from_osm(self._project, self.__model_place)
 
@@ -59,6 +63,8 @@ class Model:
     def import_population(self, overwrite=False):
         """Triggers the import of population from raster into the model"""
 
+        trigger_population(self._project, self.__population_source)
+        
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000, min_zone_pop=500, save_hexbins=True):
