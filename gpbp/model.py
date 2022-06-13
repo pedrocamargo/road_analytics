@@ -12,7 +12,7 @@ from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
 from gpbp.model_creation.trigger_network import trigger_network
-from gpbp.model_creation.trigger_population import trigger_population
+#from gpbp.model_creation.trigger_population import trigger_population
 from gpbp.model_creation.zoning.zone_building import zone_builder
 
 
@@ -43,9 +43,9 @@ class Model:
         self.__population_source = set_source(source)
 
     def import_network(self):
-        """Triggers the import of the network from OSM and adds subdivisions into the model """
-        
-        #self._project.new(self.__folder)
+        """Triggers the import of the network from OSM and adds subdivisions into the model. 
+           If the network already exists in the folder, it will be loaded, otherwise it will be created."""
+    
         trigger_network(self._project, self.__folder)
 
         import_net_from_osm(self._project, self.__model_place)
@@ -63,7 +63,7 @@ class Model:
     def import_population(self, overwrite=False):
         """Triggers the import of population from raster into the model"""
 
-        trigger_population(self._project)
+        #trigger_population(self._project)
 
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
@@ -93,7 +93,7 @@ class Model:
             subd = subd[subd.level == level]
         return subd
 
-    def close_model(self):
+    def close(self):
         """
         Close the project model.
         """
