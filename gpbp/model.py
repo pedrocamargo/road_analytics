@@ -97,7 +97,9 @@ class Model:
         self._project.close()
 
     def import_population_pyramid(self):
-
+        """
+        Triggers the import of population pyramid from raster into the model.
+        """
         get_population_pyramid(self._project, self.__model_place)
 
     @property
