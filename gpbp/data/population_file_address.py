@@ -9,7 +9,7 @@ def population_source(model_place: str, source='WorldPop'):
 
     if source == 'WorldPop':
 
-        pop_path = f'/population/all_raster_pop_source.csv'
+        pop_path = '/home/jovyan/workspace/road_analytics/gpbp/data/population/all_raster_pop_source.csv'
         df = pd.read_csv(pop_path)
         return df[df.Country.str.upper() == model_place.upper()].data_link.values[0]
 
@@ -47,7 +47,7 @@ def population_source(model_place: str, source='WorldPop'):
         else:
             raise ValueError('No population file found.')
 
-        return downloadable_file
+        return base_url + downloadable_file
 
     else:
         raise ValueError("No population source found.")

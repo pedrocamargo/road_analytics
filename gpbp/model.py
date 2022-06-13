@@ -7,14 +7,12 @@ import geopandas as gpd
 from aequilibrae import logger, Project
 
 from gpbp.data_retrieval import subdivisions
-from gpbp.model_creation.import_from_osm import import_net_from_osm
 from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
 from gpbp.model_creation.trigger_network import trigger_network
-#from gpbp.model_creation.trigger_population import trigger_population
 from gpbp.model_creation.zoning.zone_building import zone_builder
-
+from gpbp.model_creation.population_pyramid import get_population_pyramid
 
 class Model:
     def __init__(self, network_path: str, model_place: str = None):
@@ -34,6 +32,7 @@ class Model:
         self.import_population()
         self.import_subdivisions(2, True)
         self.build_zoning()
+        self.import_population_pyramid()
 
     def set_population_source(self, source='WorldPop'):
         """ Sets the source for the raster population data
@@ -46,9 +45,7 @@ class Model:
         """Triggers the import of the network from OSM and adds subdivisions into the model. 
            If the network already exists in the folder, it will be loaded, otherwise it will be created."""
     
-        trigger_network(self._project, self.__folder)
-
-        import_net_from_osm(self._project, self.__model_place)
+        trigger_network(self._project, self.__folder, self.__model_place)
 
     def import_subdivisions(self, subdivisions=2, overwrite=False):
         """Imports political subdivisions.
@@ -98,6 +95,10 @@ class Model:
         Close the project model.
         """
         self._project.close()
+
+    def import_population_pyramid(self):
+
+        get_population_pyramid(self._project, self.__model_place)
 
     @property
     def place(self):

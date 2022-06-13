@@ -1,4 +1,6 @@
 import io
+from lib2to3.pgen2.token import OP
+from sqlite3 import OperationalError
 from statistics import mode
 import urllib.request
 from os.path import join, isfile
@@ -6,7 +8,6 @@ from tempfile import gettempdir
 import zipfile
 import numpy as np
 import pandas as pd
-from psycopg2 import OperationalError
 import rasterio
 #rom sqlalchemy import over
 from aequilibrae.project import Project
@@ -22,12 +23,10 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
         Function to process raster images in Python
     """
     
-    if overwrite == True:
-        try:
-            'raw_population' in [x[0] for x in project.conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]
-            print('raw_population file already exists and will be overwritten.')
-        except OperationalError:
-            pass
+    if overwrite == True or 'raw_population' in [x[0] for x in project.conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]:
+        print('raw_population file already exists and will be overwritten.')
+        project.conn.execute('Drop table if exists raw_population')
+        project.conn.commit()
     else:
         pass
 

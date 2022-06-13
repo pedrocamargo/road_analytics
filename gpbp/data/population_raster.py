@@ -8,9 +8,9 @@ from tempfile import gettempdir
 import numpy as np
 from scipy.sparse import coo_matrix
 
-from functions.country_main_area import get_main_area
+from notebooks.functions.country_main_area import get_main_area
 
-def population_raster(data_link, field_name, project): ##DEVO FAZER O INPUT DE ROW?
+def population_raster(data_link, field_name, project):
     
     url = data_link
 

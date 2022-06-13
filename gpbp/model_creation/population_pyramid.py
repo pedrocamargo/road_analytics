@@ -1,17 +1,19 @@
+import imp
 import pandas as pd
 import geopandas as gpd
+from aequilibrae import Project
 
-from functions.population_data import pop_data
-from functions.load_zones import load_zones
-from functions.population_raster import population_raster
+from gpbp.data.population_data import pop_data
+from gpbp.data.load_zones import load_zones
+from gpbp.data.population_raster import population_raster
 
-def get_population_pyramid(model_place:str, project):
+def get_population_pyramid(project:Project, model_place:str):
     
-    pop_path = f'../model/population/all_raster_pop_age_and_sex_source.csv'
+    pop_path = '/home/jovyan/workspace/road_analytics/gpbp/data/population/all_raster_pop_age_and_sex_source.csv'
     
     population_df = pd.read_csv(pop_path)
     
-    country_df = population_df[population_df.Country == model_place].copy()#[:6]
+    country_df = population_df[population_df.Country == model_place].copy()
     
     description_field, columns_name = pop_data(country_df)
     
@@ -23,7 +25,7 @@ def get_population_pyramid(model_place:str, project):
     
     zones = load_zones(project)
     
-    for index, row in country_df.iterrows():
+    for _, row in country_df.iterrows():
         
         gdf_pop = population_raster(row.data_link, row.field_name, project)
         
