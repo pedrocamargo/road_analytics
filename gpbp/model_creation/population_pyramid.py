@@ -39,7 +39,7 @@ def get_population_pyramid(project:Project, model_place:str):
             if i not in missing_idx:
                 dict_pop[i] = 0
 
-        list_of_tuples = list(zip(dict_pop.keys(), dict_pop.values()))
+        list_of_tuples = list(zip(dict_pop.values(), dict_pop.keys()))
 
         fields.add(row.field_name, row.desc_field, 'INTEGER')
 

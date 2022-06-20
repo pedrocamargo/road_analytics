@@ -102,6 +102,11 @@ class Model:
         """
         get_population_pyramid(self._project, self.__model_place)
 
+    def import_amenities(self):
+        """ Triggers the import of ammenities from OSM. """
+        
+        pass
+
     @property
     def place(self):
         return self.__model_place
