@@ -25,7 +25,7 @@ def get_population_pyramid(project:Project, model_place:str):
     
     zones = load_zones(project)
     
-    for index, row in country_df.iterrows():
+    for _, row in country_df.iterrows():
         
         gdf_pop = population_raster(row.data_link, row.field_name, project)
         

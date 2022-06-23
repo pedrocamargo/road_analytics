@@ -1,25 +1,40 @@
+from numpy import safe_eval
 import pandas as pd
 import sqlite3
 from aequilibrae import Project
 
-def trigger_import_amenities(project:Project, export_csv=True):
+from data_retrieval.osm_tags.adjust_osm_frame import import_osm_frame
+from data_retrieval.osm_tags.save_osm_amenities import export_amenitites_dataframe
+from gpbp.data_retrieval.osm_tags.save_osm_amenities import export_tag_info
 
-    #Importar amenities na área em questão
-    #Exportar como .csv  bool
-    
+def trigger_import_amenities(project:Project, osm_data = self.__osm_data):
 
-    #Salvar no layer de zonas
+    df = import_osm_frame(project, tag='amenity')
 
     zoning = project.zoning
     fields = zoning.fields
 
-    list_of_tuples = list(zip(dict_pop.values(), dict_pop.keys()))
+    groups = df.groupby(['amenity', 'zone_id']).count()
 
-    for _, row in df.iterrows():
+    for idx, row in groups.iterrows():
 
-        fields.add(row.field_name, row.desc_field, 'INTEGER')
+        field_name = 'osm_' + idx[0] + '_amenity'
+        field_desc = 'osm ' + idx[0] + ' amenity'
 
-        zones_qry = f'UPDATE zones SET {row.field_name}=? WHERE zone_id=?;'
-        project.conn.executemany(qry, list_of_tuples)
+        fields.add(field_name, field_desc, 'INTEGER')
+
+        single_tuple = (int(row.id), idx[1])
+
+        qry = f'UPDATE zones SET {field_name}=? WHERE zone_id=?;'
+        project.conn.execute(qry, single_tuple)
         project.conn.commit()
-    pass
+
+        qry = f'UPDATE zones SET {field_name}=0 WHERE {field_name} IS NULL;'
+        project.conn.execute(qry)
+        project.conn.commit()
+
+    print('OSM amenities loaded into zones.')
+
+    export_tag_info(df, project, tag='amenity')
+
+    print('OSM amenities saved into osm_amenities file.')

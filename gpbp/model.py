@@ -1,12 +1,16 @@
 from asyncio import set_child_watcher
 import logging
 import sys
+
+from numpy import tri
 from fiona import prop_type
 
 import geopandas as gpd
 from aequilibrae import logger, Project
 
 from gpbp.data_retrieval import subdivisions
+from gpbp.data_retrieval.trigger_import_amenities import trigger_import_amenities
+from gpbp.data_retrieval.trigger_import_building import trigger_building_import
 from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
@@ -23,6 +27,7 @@ class Model:
         self.__population_source = 'WorldPop'
         self.__folder = network_path
         self._project = Project()
+        self.__osm_data = {}
         self.__starts_logging()
 
     def create(self):
@@ -66,8 +71,6 @@ class Model:
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000, min_zone_pop=500, save_hexbins=True):
         """Creates hexagonal bins, and then clusters it regarding the political subdivision.
-
-        TODO: DOCUMENT THIS METHOD AND TIE IT UP TO THE ACTUAL FUNCTION
         
         Args:
              *hexbin_size*(:obj:`int`): size of the hexagonal bins to be created.
@@ -103,9 +106,16 @@ class Model:
         get_population_pyramid(self._project, self.__model_place)
 
     def import_amenities(self):
-        """ Triggers the import of ammenities from OSM. """
+        """ Triggers the import of ammenities from OSM. 
+            Data will be exported as columns in zones file and as a separate SQL file."""
         
-        pass
+        trigger_import_amenities(self._project, self.__osm_data)
+
+    def import_buildings(self):
+        """ Triggers the import of buildings from both OSM and Microsoft Bing. 
+            Data will be exported as columns in zones file and as a separate SQL file."""
+
+        trigger_building_import(self.__model_place, self._project, self.__osm_data)
 
     @property
     def place(self):

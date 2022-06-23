@@ -1,0 +1,16 @@
+
+from data_retrieval.osm_tags.osm_load_data import load_osm_data
+
+def amenities(tile_size=25, osm_data=self.__osm_data):
+    """ Finds all [amenities] (<https://wiki.openstreetmap.org/wiki/Key:amenity>) with a certain type for the
+        model area.
+
+    Args:
+        *tile_size* (:obj:`float`): The size of the tile we want to split our area in. Defaults to 25km side
+    """
+    queries = [f'[out:json][timeout:180];(node["amenity"]["area"!~"yes"]' + '({});>;);out geom;',
+               f'[out:json][timeout:180];(way["amenity"]["area"!~"yes"]' + '({});>;);out geom;']
+
+    load_osm_data(tag='amenity', tile_size=tile_size, queries=queries)
+    
+    return osm_data['amenity']
