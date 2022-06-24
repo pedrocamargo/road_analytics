@@ -1,7 +1,7 @@
 
 from gpbp.data_retrieval.osm_tags.osm_load_data import load_osm_data
 
-def amenities(osm_data: dict, tile_size=25):
+def amenities(osm_data: dict,  model_place: str, tile_size=25):
     """ Finds all [amenities] (<https://wiki.openstreetmap.org/wiki/Key:amenity>) with a certain type for the
         model area.
 
@@ -11,6 +11,6 @@ def amenities(osm_data: dict, tile_size=25):
     queries = [f'[out:json][timeout:180];(node["amenity"]["area"!~"yes"]' + '({});>;);out geom;',
                f'[out:json][timeout:180];(way["amenity"]["area"!~"yes"]' + '({});>;);out geom;']
 
-    load_osm_data(tag='amenity', tile_size=tile_size, queries=queries)
+    load_osm_data(tag='amenity', tile_size=tile_size, queries=queries, model_place=model_place, osm_data=osm_data)
     
     return osm_data['amenity']

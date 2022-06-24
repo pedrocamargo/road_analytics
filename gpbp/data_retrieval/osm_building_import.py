@@ -4,9 +4,9 @@ from aequilibrae import Project
 from gpbp.data_retrieval.osm_tags.import_osm_buildings import import_osm_buildings
 from gpbp.data_retrieval.osm_tags.save_osm_amenities import export_tag_info
 
-def osm_building(project, osm_data):
+def osm_building_import(project:Project, osm_data:dict, model_place:str):
         
-    df = import_osm_buildings(project, osm_data, tag='building')
+    df = import_osm_buildings(model_place, project, osm_data)
 
     zoning = project.zoning
     fields = zoning.fields
@@ -47,4 +47,15 @@ def osm_building(project, osm_data):
         project.conn.execute(qry)
         project.conn.commit()
 
-    export_tag_info(df, project, tag='building')
+    project.conn.execute(f'CREATE TABLE IF NOT EXISTS osm_buildings("type" TEXT, "id" INTEGER, "building" TEXT, \
+                            "zone_id" INTEGER, "area" FLOAT);')
+    project.conn.execute( f"SELECT AddGeometryColumn('osm_buildings', 'geometry', 4326, 'POINT', 'XY' );")
+    project.conn.execute(f"SELECT CreateSpatialIndex( 'osm_buildings' , 'geometry' );")
+    project.conn.commit()
+
+    sql = f"INSERT into osm_buildings(type, id, building, zone_id, area, geometry) VALUES(?, ?, ?, ?, ?, CastToPoint(GeomFromWKB(?, 4326)));"
+
+    for _, rec in df.iterrows():
+        project.conn.execute(sql, [rec['type'], rec['id'], rec['building'], rec['zone_id'], rec.area, rec.geom.wkb])
+
+    project.conn.commit()

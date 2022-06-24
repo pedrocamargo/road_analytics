@@ -7,13 +7,13 @@ from gpbp.data_retrieval.osm_tags.save_microsoft_buildings import save_microsoft
 from gpbp.data_retrieval.osm_tags.count_microsoft_buildings import count_microsoft_buildings
 from gpbp.data_retrieval.osm_tags.area_microsoft_buildings import area_microsoft_buildings
 
-def microsoft_building(model_place:str, project:Project):
+def microsoft_building(project:Project, model_place:str):
 
     zones = load_zones(project)
 
     buildings_by_zone = microsoft_buildings_by_zone(model_place, zones, project)
     
-    save_microsoft_buildings(buildings_by_zone)
+    save_microsoft_buildings(buildings_by_zone, project)
     
     count_microsoft_buildings(buildings_by_zone, zones, project)
     

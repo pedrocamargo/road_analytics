@@ -1,8 +1,9 @@
-import geoopandas as gpd
+import geopandas as gpd
+from aequilibrae import Project
 
 from gpbp.data_retrieval.osm_tags.read_microsoft_file import read_bing_file
 
-def microsoft_buildings_by_zone(model_place: str, zones: gpd.GeoDataFrame):
+def microsoft_buildings_by_zone(model_place: str, zones: gpd.GeoDataFrame, project: Project):
 
     model_gdf = read_bing_file(model_place)
 

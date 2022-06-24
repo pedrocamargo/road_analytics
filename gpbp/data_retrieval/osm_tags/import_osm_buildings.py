@@ -7,25 +7,23 @@ from gpbp.data_retrieval.osm_tags.osm_buildings import buildings
 from gpbp.data_retrieval.osm_tags.osm_tag_values import building_values
 
 
-def import_osm_buildings(tag: str, project: Project):
+def import_osm_buildings(model_place:str, project:Project, osm_data:dict):
 
-    df = pd.DataFrame.from_dict(buildings())  # aqui não vai dar certo.
+    df = pd.DataFrame.from_dict(buildings(osm_data, model_place)) 
 
     df['geom'] = df.apply(point_or_polygon, axis=1)
 
-    df = df[['type', 'id', 'geom', tag]]
+    tags = df['tags'].apply(pd.Series)[['building']]
 
-    tags = df['tags'].apply(pd.Series)[[tag]]
+    tags[f'update_building'] = tags['building'].apply(lambda x: building_values.get(x))
 
-    tags[f'update_{tag}'] = tags[tag].apply(lambda x: building_values.get(x))
+    tags[f'update_building'].fillna(value='others', inplace=True)
 
-    tags[f'update_{tag}'].fillna(value='others', inplace=True)
+    tags.drop(columns=['building'], inplace=True)
 
-    tags.drop(columns=[tag], inplace=True)
+    tags.rename(columns={f'update_building': 'building'}, inplace=True)
 
-    tags.rename(columns={f'update_{tag}': tag}, inplace=True)
-
-    merged_df = df.merge(tags, left_index=True, right_index=True)
+    merged_df = df.merge(tags, left_index=True, right_index=True)[['type', 'id', 'geom', 'building']]
 
     zones = load_zones(project)
 

@@ -3,11 +3,11 @@ import pandas as pd
 import geopandas as gpd
 
 from gpbp.data_retrieval.microsoft_building import microsoft_building
-from gpbp.data_retrieval.osm_building_import import osm_building
+from gpbp.data_retrieval.osm_building_import import osm_building_import
 
-def trigger_building_import(model_place: str, project: Project, osm_data):
+def trigger_building_import(model_place: str, project: Project, osm_data: dict):
 
-    microsoft_building(model_place, project)
+    microsoft_building(project, model_place)
 
-    osm_building(project, osm_data)
+    osm_building_import(project, osm_data, model_place)
 

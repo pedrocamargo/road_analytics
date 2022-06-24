@@ -1,5 +1,5 @@
 
-import sleep
+from time import sleep
 import requests
 from gpbp.data_retrieval.osm_tags.set_bounding_boxes import bounding_boxes
 

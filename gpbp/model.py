@@ -38,6 +38,8 @@ class Model:
         self.import_subdivisions(2, True)
         self.build_zoning()
         self.import_population_pyramid()
+        self.import_amenities()
+        self.import_buildings()
 
     def set_population_source(self, source='WorldPop'):
         """ Sets the source for the raster population data
@@ -109,7 +111,7 @@ class Model:
         """ Triggers the import of ammenities from OSM. 
             Data will be exported as columns in zones file and as a separate SQL file."""
         
-        trigger_import_amenities(self._project, self.__osm_data)
+        trigger_import_amenities(self.__model_place, self._project, self.__osm_data)
 
     def import_buildings(self):
         """ Triggers the import of buildings from both OSM and Microsoft Bing. 
