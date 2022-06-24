@@ -1,7 +1,8 @@
 import sqlite3
 import pandas as pd
+from aequilibrae import Project
 
-def export_tag_info(df, project, tag:str):
+def export_tag_info(df, project: Project, tag:str):
 
     if tag == 'amenity':
         file_name = 'osm_amenities'

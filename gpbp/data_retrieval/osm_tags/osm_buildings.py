@@ -1,7 +1,7 @@
 
-from data_retrieval.osm_tags.osm_load_data import load_osm_data
+from gpbp.data_retrieval.osm_tags.osm_load_data import load_osm_data
 
-def buildings(tile_size=25):
+def buildings(osm_data:dict, tile_size=25):
     """ Finds all [buildings] (<https://wiki.openstreetmap.org/wiki/Key:building>) with a certain type for the
         model area.
 

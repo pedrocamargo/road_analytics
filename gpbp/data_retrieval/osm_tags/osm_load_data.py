@@ -1,9 +1,9 @@
 
 import sleep
 import requests
-from data_retrieval.osm_tags.set_bounding_boxes import bounding_boxes
+from gpbp.data_retrieval.osm_tags.set_bounding_boxes import bounding_boxes
 
-def load_osm_data(tag, tile_size, queries, model_place:str):
+def load_osm_data(tag:str, osm_data:dict, tile_size, queries, model_place:str):
     
     """ Loads data from OSM or cached to disk"""
     

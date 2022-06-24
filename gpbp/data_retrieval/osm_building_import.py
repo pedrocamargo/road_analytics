@@ -1,13 +1,12 @@
 import sqlite3
 from aequilibrae import Project
 
-from gpbp.data.load_zones import load_zones
-from data_retrieval.osm_tags.adjust_osm_frame import import_osm_frame
+from gpbp.data_retrieval.osm_tags.import_osm_buildings import import_osm_buildings
 from gpbp.data_retrieval.osm_tags.save_osm_amenities import export_tag_info
 
-def osm_building_import(project, osm_data):
+def osm_building(project, osm_data):
         
-    df = import_osm_frame(project, osm_data, tag='building')
+    df = import_osm_buildings(project, osm_data, tag='building')
 
     zoning = project.zoning
     fields = zoning.fields

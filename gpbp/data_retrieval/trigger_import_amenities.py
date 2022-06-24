@@ -3,13 +3,12 @@ import pandas as pd
 import sqlite3
 from aequilibrae import Project
 
-from data_retrieval.osm_tags.adjust_osm_frame import import_osm_frame
-from data_retrieval.osm_tags.save_osm_amenities import export_amenitites_dataframe
+from gpbp.data_retrieval.osm_tags.import_osm_amenities import import_osm_amenities
 from gpbp.data_retrieval.osm_tags.save_osm_amenities import export_tag_info
 
-def trigger_import_amenities(project:Project, osm_data = self.__osm_data):
+def trigger_import_amenities(project:Project, osm_data: dict):
 
-    df = import_osm_frame(project, tag='amenity')
+    df = import_osm_amenities(project, osm_data, tag='amenity')
 
     zoning = project.zoning
     fields = zoning.fields
@@ -33,8 +32,4 @@ def trigger_import_amenities(project:Project, osm_data = self.__osm_data):
         project.conn.execute(qry)
         project.conn.commit()
 
-    print('OSM amenities loaded into zones.')
-
     export_tag_info(df, project, tag='amenity')
-
-    print('OSM amenities saved into osm_amenities file.')

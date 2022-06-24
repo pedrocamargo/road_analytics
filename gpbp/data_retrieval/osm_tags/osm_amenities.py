@@ -1,7 +1,7 @@
 
-from data_retrieval.osm_tags.osm_load_data import load_osm_data
+from gpbp.data_retrieval.osm_tags.osm_load_data import load_osm_data
 
-def amenities(tile_size=25, osm_data=self.__osm_data):
+def amenities(osm_data: dict, tile_size=25):
     """ Finds all [amenities] (<https://wiki.openstreetmap.org/wiki/Key:amenity>) with a certain type for the
         model area.
 
