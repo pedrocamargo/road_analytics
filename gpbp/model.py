@@ -27,7 +27,7 @@ class Model:
         self.__population_source = 'WorldPop'
         self.__folder = network_path
         self._project = Project()
-        self.__osm_data = {}
+        self.__osm_data = {'amenity':[], 'building':[]}
         self.__starts_logging()
 
     def create(self):
