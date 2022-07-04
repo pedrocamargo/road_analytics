@@ -22,7 +22,7 @@ def add_subdivisions_to_model(project: Project, model_place: str, levels_to_add=
     conn = sqlite3.connect(join("project_database.sqlite")) # aqui
     all_tables = [x[0] for x in conn.execute("SELECT name FROM sqlite_master WHERE type ='table'").fetchall()]
 
-    if overwrite == True and 'country_subdivisions' not in all_tables:
+    if overwrite == True or 'country_subdivisions' not in all_tables:
         overwrite_subdivisions(project, model_place, gdf)
     else:
         pass
