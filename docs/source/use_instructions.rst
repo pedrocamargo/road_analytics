@@ -7,7 +7,7 @@ Using this software
 These Jupyter Notebooks can be run locally or in the Cloud (we recommend using
 `SaturnCloud <https://saturncloud.io/>`_ , although Google Colab should be
 powerful enough for very small countries), and we provide the documentation for
-running it in both the SaturnCloud and locally [TODO].
+running it in both the Saturn Cloud and locally [TODO].
 
 Saturn Cloud
 ------------
@@ -16,7 +16,24 @@ We have no association with Saturn Cloud whatsoever, but we have found their
 cloud offering to be the most capable and user-friendly of all alternatives
 currently on the market.
 
-XXXXX INCLUDE INSTRUCTIONS FOR SETTING UP SATURN CLOUD XXXXXXXXXXXXXX
+To set up Saturn Cloud, you should `sign up <https://saturncloud.io/>` first. If you do not have an account,
+you should create one first, otherwise, you can just login. The next step is creating
+a resource (aka environment) so we can execute the package. When setting up your 
+resource, make sure to include the following Python libs, otherwise we cannot assure 
+the complete functionality of the package.
+
+* aequilibrae
+* openmatrix
+* geopandas
+* pyarrow 
+* numpy v. 1.22.3
+* folium
+* rasterio
+* rtree
+* libpysal v. 4.3.0
+
+Also, when setting up Saturn Cloud, it is possible to choose one of many disk spaces. 
+For most small countries, a 40 GB disk memory should be enough.
 
 "Hidden functions"
 ------------------

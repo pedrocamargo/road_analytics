@@ -8,6 +8,38 @@ General concepts
 4-step models
 -------------
 
+The 4-step model is a classical transportation model. In a very simplistic way,
+it consists in input populational, economical, and network data into a model,
+that can generate, estimate, split, and allocate the existing demand.
+
+Trip generation is the first step. It consists in predicting the number of trips 
+generated and attracted to each zone in the analysis. Despite our intuition, for 
+transportation matters, a trip is associated with a one-way movement. As an example, 
+if we leave our home, go to the city hall, and then return home, it means that we 
+just made two trips, and not only one. Trip generation step studies the 
+relationships between the trips undertook and socio-economical characteristics 
+from users and zones. 
+
+Later, comes the distribution of these trips. In a simplistic way, in this step all 
+trips generated are going to be distributed across the study zones. The aim of trip 
+distribution is to investigate the mutual attraction between zones. The result of 
+this step is a matrix, a table that associates the number of trips that have origin 
+and destination to each one of the study zones. This matrix is used as input in the 
+following step. 
+
+Modal split is the following step. In this step, the data from the origin/destination 
+matrix is going to be split into different transportation modes. The goal of modal 
+split is answering which mode of transportation will affect people’s choice. It is 
+important to keep in mind that there are internal and external factors that influence 
+the choice of transportation mode, such as income, household structure and location, 
+trip purposes, travel time, safety, and convenience. 
+
+The final step consists in assigning the existing demand to the existing transportation 
+network. In the demand assignment, an interaction between demand for transportation 
+(with the data generated in the past steps) and the available transportation offer 
+happens. It aims to assign people and vehicles to road and public transport networks, 
+so it turns out to be both a route choice and a demand distribution problem. 
+
 .. _aequilibrae:
 
 AequilibraE

@@ -22,7 +22,7 @@ And that provide capabilities for:
     * Fast summary statistics for transport networks
     * Network resilience to disruptions with respect to access to critical
       infrastructure
-    * XXX
+    * Descriptive population analytics
     * YYY
 
 This analytics pipeline is organized in sections for ease of use, and some

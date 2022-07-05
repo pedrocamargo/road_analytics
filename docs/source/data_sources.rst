@@ -3,7 +3,7 @@
 Data sources
 ============
 
-To be included in the main portions of thisanalytics pipeline, all data sources
+To be included in the main portions of this analytics pipeline, all data sources
 have to fulfill the following requirements:
 
 - Coverage: Since this pipeline is designed to be deployable for any country in
@@ -28,7 +28,21 @@ its `website <https://www.openstreetmap.org/about>`_.
 
 Point-of-Interest
 -----------------
-XXXXXXXXX INCLUDE DISCUSSION ON OSM DATA    XXXXXXXXXXXXXXXXXXXXXXXX
+
+A Point-of-Interest (POI) represents a particular feature in the space, like  
+churches, schools, pubs, or tourist attractions. It does not necessarily have to 
+be a point, but can also be other OSM elements, such as nodes or ways. 
+
+It is worth reminding that the "interest" part should not be considered too 
+literaly, once a feature can be quite ordinary, such as a postbox. In this case,
+these features are usally considered ``amenity``=*s.  
+
+Amenities are useful and import facilities for visitiors and residents. More 
+information on amenity values on OSM, is available `in this page <https://wiki.openstreetmap.org/wiki/Key:amenity>`.
+
+A building can also be a POI. The OSM building tag is used to identify individual
+buildings or groups of connected buildings, and can assume several values.
+More information on building values can be found in `this page <https://wiki.openstreetmap.org/wiki/Buildings>`.
 
 Population
 ----------
