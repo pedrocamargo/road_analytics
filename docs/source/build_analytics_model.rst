@@ -10,9 +10,14 @@ from the raster layers available at the  `Humanitarian Data Exchange
 <https://data.humdata.org/>`_.
 
 1. Building Road network model
-2. Incorporating population data
-    * Importing raw population data
-    * Aggregating population into analysis zones
+2. Incorporating population data 
+  
+   * Importing raw population data
+   * Aggregating population into analysis zones
+   * Importing population pyramid data
+  
+3. Incorporating amenity and building data
+4. Calculate Rural Access Index
 
 At the end of the creation of the analytics models, the user will have a
 all their data inside and :ref:`aequilibrae` model, which is a Python-native
@@ -51,7 +56,8 @@ These use cases can be `visualized as well!
 <https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/use_cases/1.Descriptive_analytics.ipynb>`_
 
 Incorporating population data
------------------------------
+_____________________________
+
 As mentioned above, the population information we use in this analytics pipeline
 are obtained directly from the `Humanitarian Data Exchange
 <https://data.humdata.org/>`_ and come on a raster (i.e. image) format, and it
@@ -84,4 +90,20 @@ This process includes the following steps:
   notebook! <https://nbviewer.org/github/pedrocamargo/road_analytics/blob/main/notebooks/1.2.1_Vectorizing_population.ipynb>`_
 
 
+Importing amenity and buildings
+_______________________________
+
+The amenity and building information we use is obtained directly from the
+OSM. Both amenity and building information provides us useful information regarding
+land-use. Later, we can use this information as an input for our trip
+generation model.
+
+Calculate Rural Access Index
+_____________________________
+
+:ref:`RAI <Rural Access Index>` is an useful index, and represents the percentage of rural people who live within
+a two kilometer radius from an all-seasoned road. 
+
+It is possible to visualize the index for subdivisions in Andorra in 
+`this notebook <https://github.com/pedrocamargo/road_analytics/blob/renata/package_setup/notebooks/Rural_Access_Index.ipynb>`.
 

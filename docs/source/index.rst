@@ -23,7 +23,7 @@ And that provide capabilities for:
     * Network resilience to disruptions with respect to access to critical
       infrastructure
     * Descriptive population analytics
-    * YYY
+    * Rural Access Index (RAI)
 
 This analytics pipeline is organized in sections for ease of use, and some
 expertise in transportation planning/modelling/forecasting may be useful when

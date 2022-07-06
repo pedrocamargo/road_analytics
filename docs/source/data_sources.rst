@@ -85,3 +85,11 @@ corresponding section.
 
 Data documentation can be found on its `website
 <https://dataforgood.facebook.com/dfg/tools/commuting-zones>`_.
+
+Rural and Urban Areas
+---------------------
+
+Rural and urban areas information all over the world are provided by `The Global 
+Rural-Urban Mapping Project (GRUMP) <https://sedac.ciesin.columbia.edu/data/collection/grump-v1>`.
+This is a useful resource and helps us to identify the total population 
+living in rural areas, and later calculating the :ref:`Rural Access Index`.
