@@ -44,7 +44,7 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
         var = z.extract(filename)
         dataset = rasterio.open(var)
     else:
-        print('Non-existing source.')
+        raise ValueError ('Non-existing source.')
 
     main_area = get_main_area(project)
     

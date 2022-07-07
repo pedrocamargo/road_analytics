@@ -1,5 +1,6 @@
 import imp
 import io
+from pyexpat import model
 import geopandas as gpd
 import zipfile
 import requests
@@ -11,14 +12,13 @@ def read_bing_file(model_place: str):
 
     url = 'https://github.com/microsoft/GlobalMLBuildingFootprints'
 
-    try:
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        downloadable_link = soup.find('td', string=f'{model_place}').find_next_siblings()[1].find('a')['href']
+    r = requests.get(url)
+    soup = BeautifulSoup(r.text, 'html.parser')
 
-    except AttributeError:
-        print('There is no available data for the country in Bing database.')
-        return
+    if model_place in soup.find_all(string=re.compile(f"{model_place}")):
+        downloadable_link = soup.find('td', string=f'{model_place}').find_next_siblings()[1].find('a')['href']
+    else:
+        raise ValueError('There is no available data for the country in Bing database.')
 
     r = requests.get(downloadable_link)
     z = zipfile.ZipFile(io.BytesIO(r.content))

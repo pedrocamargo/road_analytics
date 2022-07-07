@@ -15,6 +15,7 @@ def area_microsoft_buildings(buildings_by_zone:gpd.GeoDataFrame, zones:gpd.GeoDa
     zoning = project.zoning
     fields = zoning.fields
 
+    #Mudar controle no código
     try:
         fields.add('microsoft_building_area', 'Building area provided by Microsoft Bing', 'INTEGER')
     except:
