@@ -1,7 +1,7 @@
 from turtle import down
 import pandas as pd
 
-def population_source(model_place: str, source='WorldPop'):
+def link_source(model_place: str, source='WorldPop'):
 
     pop_path = '/home/jovyan/workspace/road_analytics/gpbp/data/population/all_raster_pop_source.csv'
     df = pd.read_csv(pop_path)

@@ -19,8 +19,9 @@ def import_net_from_osm(project: Project, model_place: str):
 
     if place_geo.area == 0:
         # TODO: Add a huge warning here
-        return Warning('No country borders were imported.')
+        raise Warning('No country borders were imported.')
 
+    #Mudar aqui 
     project.conn.execute('CREATE TABLE IF NOT EXISTS country_borders("country_name" TEXT);')
     project.conn.execute("SELECT AddGeometryColumn( 'country_borders', 'geometry', 4326, 'MULTIPOLYGON', 'XY' );")
 

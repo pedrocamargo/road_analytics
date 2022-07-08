@@ -14,7 +14,7 @@ from aequilibrae.project import Project
 import requests
 from scipy.sparse import coo_matrix
 
-from gpbp.data.population_file_address import population_source
+from gpbp.data.population_file_address import link_source
 from notebooks.functions.country_main_area import get_main_area
 
 
@@ -22,6 +22,10 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
     """
         Function to process raster images in Python
     """
+    url = link_source(model_place, source)
+
+    if url == 'no file':
+        raise ValueError(f'No population file for {source} was found. ')
     
     if overwrite == True or 'raw_population' in [x[0] for x in project.conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()]:
         print('raw_population file already exists and will be overwritten.')
@@ -29,8 +33,6 @@ def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrit
         project.conn.commit()
     else:
         pass
-
-    url = population_source(model_place, source)
 
     if source == 'WorldPop':    
         dest_path = join(gettempdir(), f"pop_{model_place}.tif")

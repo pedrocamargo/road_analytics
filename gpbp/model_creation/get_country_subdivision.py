@@ -5,11 +5,10 @@ import geopandas as gpd
 import pandas as pd
 from shapely.ops import unary_union
 from shapely import wkt
-from aequilibrae import Project
 
-def get_subdivisions(model_place:str, level:int, project:Project):
+def get_subdivisions(model_place:str, level:int):
 
-    pop_path = '/../../../../gpbp/data/population/all_raster_pop_source.csv'
+    pop_path = '/../../../../gpbp/data/population/all_raster_pop_source.csv' #Verificar isso depois!!
     df = pd.read_csv(pop_path)
     iso_code = df[df.Country.str.upper() == model_place.upper()].iso_code.values[0]
 
@@ -18,9 +17,12 @@ def get_subdivisions(model_place:str, level:int, project:Project):
     if len(r.json()) > 0:
         dlPath = r.json()[0]['gjDownloadURL']
         geoBoundary = requests.get(dlPath).json()
-    
+
     else:
-        raise ValueError(f"There is no administrative boundary level {level}.")
+        print(f"There is no administrative boundary level {level}. Will use administrative boundary level 1 instead.")
+        r = requests.get(f"https://www.geoboundaries.org/gbRequest.html?ISO={iso_code}&ADM=ADM1")
+        dlPath = r.json()[0]['gjDownloadURL']
+        geoBoundary = requests.get(dlPath).json()
 
     adm_level = {}
 
@@ -44,5 +46,6 @@ def get_subdivisions(model_place:str, level:int, project:Project):
     gdf = gpd.GeoDataFrame(df, geometry=gpd.GeoSeries.from_wkt(df.geometry), crs=4326)
 
     gdf.insert(0, 'level', level)
+    gdf.insert(1, 'country_name', model_place)
 
     return gdf

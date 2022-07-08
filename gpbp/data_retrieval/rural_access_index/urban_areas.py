@@ -1,10 +1,10 @@
 import geopandas as gpd
-import pandas as pd
+#import pandas as pd
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
 
-from ..country_main_area import get_main_area
+from ....notebooks.functions.country_main_area import get_main_area
 
 def select_urban_areas(project):
     
@@ -17,7 +17,7 @@ def select_urban_areas(project):
     
     country_borders = get_main_area(project)
     
-    gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), geometry='geometry', crs=4326)
+    #gdf = gpd.GeoDataFrame(pd.DataFrame(country_borders, columns=['geometry']), geometry='geometry', crs=4326)
     
     urban_areas = gpd.read_file(url, mask=country_borders)
     

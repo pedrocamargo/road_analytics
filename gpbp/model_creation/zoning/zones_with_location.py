@@ -16,10 +16,11 @@ def zones_with_location(hexb, all_subdivisions):
     found_centroid = found_centroid.dropna()
     
     not_found = hexb[~hexb.hex_id.isin(found_centroid.hex_id)]
-    not_found_merged = sjoin(not_found, states, how="left", predicate="intersects")  #replace district by state
-    not_found_merged = not_found_merged[['hex_id','division_name']] #replace district
+    # replace district by state
+    not_found_merged = sjoin(not_found, states, how="left", predicate="intersects")
+    not_found_merged = not_found_merged[['hex_id', 'division_name_left']]  # replace district
     not_found_merged.dropna(inplace=True)
-    not_found_merged = not_found_merged.rename(columns={'division_name':'division_name'})
+    not_found_merged = not_found_merged.rename(columns={'division_name_left': 'division_name'})
     
     with_data = pd.concat([not_found_merged, found_centroid])
     

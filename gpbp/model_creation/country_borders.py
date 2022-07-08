@@ -1,16 +1,19 @@
-import time
-import re
-import requests
-from aequilibrae.project.network.osm_utils.osm_params import http_headers, memory
-from shapely.geometry import MultiPolygon, Point, LineString
-from shapely.ops import polygonize
-from os.path import dirname, join
-import pandas as pd
-import shapely.wkb
-import sqlite3
+#import time
+#import re
+#import requests
+#from aequilibrae.project.network.osm_utils.osm_params import http_headers, memory
+#from shapely.geometry import MultiPolygon, Point, LineString
+#from shapely.ops import polygonize
+#from os.path import dirname, join
+import geopandas as gpd
+#import shapely.wkb
+#import sqlite3
+from aequilibrae import Project
 
+#from gpbp.model_creation.get_country_subdivision import get_subdivisions
 
-def get_country_borders(country_name: str):
+def get_country_borders(project:Project):
+    """
     pth = join(dirname(dirname(dirname(__file__))), 'model', 'data', 'country_borders.sqlite')
     conn = sqlite3.connect(pth)
     conn.enable_load_extension(True)
@@ -19,5 +22,8 @@ def get_country_borders(country_name: str):
     country_wkb = conn.execute(sql, [country_name]).fetchone()[0]
     polyg = MultiPolygon(shapely.wkb.loads(country_wkb))
     conn.close()
+    """
+    sql = "SELECT country_name, level, Hex(ST_AsBinary(GEOMETRY)) as geom FROM country_subdivisions;"
+    borders = gpd.GeoDataFrame.from_postgis(sql, project.conn, geom_col="geom", crs=4326)
 
-    return polyg
+    return borders.dissolve()

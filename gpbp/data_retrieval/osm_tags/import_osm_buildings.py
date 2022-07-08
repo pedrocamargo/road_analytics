@@ -6,14 +6,13 @@ from gpbp.data.load_zones import load_zones
 from gpbp.data_retrieval.osm_tags.osm_buildings import buildings
 from gpbp.data_retrieval.osm_tags.osm_tag_values import building_values
 
+def import_osm_buildings(model_place:str, project:Project, osm_data:dict, zones:gpd.GeoDataFrame):
 
-def import_osm_buildings(model_place:str, project:Project, osm_data:dict):
+    df = pd.DataFrame.from_dict(buildings(osm_data, model_place))
 
-    df = pd.DataFrame.from_dict(buildings(osm_data, model_place)) 
+    df['geom'] = df.apply(point_or_polygon, axis=1)  #AQUI
 
-    df['geom'] = df.apply(point_or_polygon, axis=1)
-
-    tags = df['tags'].apply(pd.Series)[['building']]
+    tags = df['tags'].apply(pd.Series)[['building']] 
 
     tags[f'update_building'] = tags['building'].apply(lambda x: building_values.get(x))
 
@@ -25,20 +24,18 @@ def import_osm_buildings(model_place:str, project:Project, osm_data:dict):
 
     merged_df = df.merge(tags, left_index=True, right_index=True)[['type', 'id', 'geom', 'building']]
 
-    zones = load_zones(project)
-
     gdf = gpd.GeoDataFrame(merged_df, geometry='geom', crs=4326)
 
     tag_by_zone = gpd.sjoin(gdf, zones)
 
     tag_by_zone.drop(columns='index_right', inplace=True)
 
-    tag_by_zone['area'] = tag_by_zone.geom.to_crs(3857).area
+    tag_by_zone['area'] = tag_by_zone.geom.to_crs(3857).area #AQUI
 
     return tag_by_zone
 
 
-def point_or_polygon(row):
+def point_or_polygon(row): #NÃO TEM ESSA FUNC. DO OUTRO LADO
 
     if row.type == 'node':
 

@@ -9,6 +9,7 @@ import geopandas as gpd
 from aequilibrae import logger, Project
 
 from gpbp.data_retrieval import subdivisions
+from gpbp.data_retrieval.rural_access_index.basic_rai_computation import basic_RAI_data
 from gpbp.data_retrieval.trigger_import_amenities import trigger_import_amenities
 from gpbp.data_retrieval.trigger_import_building import trigger_building_import
 from gpbp.model_creation.raster_to_model import pop_to_model
@@ -27,15 +28,15 @@ class Model:
         self.__population_source = 'WorldPop'
         self.__folder = network_path
         self._project = Project()
-        self.__osm_data = {'amenity':[], 'building':[]}
+        self.__osm_data = {}
         self.__starts_logging()
 
     def create(self):
         """Creates the entire model"""
-
+        
+        self.import_subdivisions(2, True)
         self.import_network()
         self.import_population()
-        self.import_subdivisions(2, True)
         self.build_zoning()
         self.import_population_pyramid()
         self.import_amenities()
@@ -65,9 +66,12 @@ class Model:
         add_subdivisions_to_model(self._project, self.__model_place, subdivisions, overwrite)
 
     def import_population(self, overwrite=False):
-        """Triggers the import of population from raster into the model"""
-
-        #trigger_population(self._project)
+        """
+        Triggers the import of population from raster into the model
+        
+        Args:
+                *overwrite* (:obj:`bool`): Deletes pre-existing population_source_import. Defaults to False
+        """
 
         pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
 
@@ -118,6 +122,10 @@ class Model:
             Data will be exported as columns in zones file and as a separate SQL file."""
 
         trigger_building_import(self.__model_place, self._project, self.__osm_data)
+
+    def rai_computation(self):
+
+        basic_RAI_data(self._project)
 
     @property
     def place(self):

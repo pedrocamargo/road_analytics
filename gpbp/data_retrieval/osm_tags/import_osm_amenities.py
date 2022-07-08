@@ -8,7 +8,7 @@ from gpbp.data_retrieval.osm_tags.osm_tag_values import amenity_values
 
 def import_osm_amenities(model_place:str, project:Project, osm_data:dict):
 
-    df = pd.DataFrame.from_dict(amenities(osm_data, model_place))
+    df = pd.DataFrame.from_dict(amenities(osm_data, model_place))  # MUDA
 
     df['geom'] = df.apply(lambda x: Point(x.lon, x.lat), axis=1)
 
