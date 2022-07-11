@@ -1,11 +1,9 @@
 import pandas as pd
 import geopandas as gpd
-
-# from functions.load_hexbins import load_hexbins
-from ...data.load_zones import load_zones
+from gpbp.data.load_zones import load_zones
 from geopandas import sjoin_nearest
 
-from .population_data import population_data
+from gpbp.data_retrieval.rural_access_index.population_data import population_data
 
 def basic_RAI_data(project):
 

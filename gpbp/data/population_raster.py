@@ -8,7 +8,7 @@ from tempfile import gettempdir
 import numpy as np
 from scipy.sparse import coo_matrix
 
-from notebooks.functions.country_main_area import get_main_area
+from gpbp.data_retrieval.country_main_area import get_main_area
 
 def population_raster(data_link, field_name, project):
     

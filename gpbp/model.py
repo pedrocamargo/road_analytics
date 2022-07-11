@@ -112,14 +112,18 @@ class Model:
         get_population_pyramid(self._project, self.__model_place)
 
     def import_amenities(self):
-        """ Triggers the import of ammenities from OSM. 
-            Data will be exported as columns in zones file and as a separate SQL file."""
+        """ 
+        Triggers the import of ammenities from OSM. 
+        Data will be exported as columns in zones file and as a separate SQL file.
+        """
         
         trigger_import_amenities(self.__model_place, self._project, self.__osm_data)
 
     def import_buildings(self):
-        """ Triggers the import of buildings from both OSM and Microsoft Bing. 
-            Data will be exported as columns in zones file and as a separate SQL file."""
+        """ 
+        Triggers the import of buildings from both OSM and Microsoft Bing. 
+        Data will be exported as columns in zones file and as a separate SQL file.
+        """
 
         trigger_building_import(self.__model_place, self._project, self.__osm_data)
 

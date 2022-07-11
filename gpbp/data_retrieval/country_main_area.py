@@ -1,4 +1,4 @@
-from aequilibrae.project import Project
+from aequilibrae import Project
 import shapely
 
 def get_main_area(project: Project):

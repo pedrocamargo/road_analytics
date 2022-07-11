@@ -19,7 +19,7 @@ def microsoft_buildings_by_zone(model_place: str, project:Project):
     if model_place in soup.find_all(string=re.compile(f"{model_place}")):
         downloadable_link = soup.find('td', string=f'{model_place}').find_next_siblings()[1].find('a')['href']
     else:
-        raise ValueError('There is no available data for the country in Bing database.')
+        return ValueError('There is no available data for the country in Bing database.')
 
     r = requests.get(downloadable_link)
     z = zipfile.ZipFile(io.BytesIO(r.content))

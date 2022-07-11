@@ -1,10 +1,9 @@
 import geopandas as gpd
-#import pandas as pd
 import urllib.request
 from os.path import join, isfile
 from tempfile import gettempdir
 
-from ....notebooks.functions.country_main_area import get_main_area
+from gpbp.data_retrieval.country_main_area import get_main_area
 
 def select_urban_areas(project):
     

@@ -1,6 +1,6 @@
-from .urban_areas import select_urban_areas
+from gpbp.data_retrieval.rural_access_index.urban_areas import select_urban_areas
 
-from ....notebooks.functions.load_vectorized_pop import load_vectorized_pop
+from gpbp.data_retrieval.load_vectorized_pop import load_vectorized_pop
 
 
 def population_data( project):

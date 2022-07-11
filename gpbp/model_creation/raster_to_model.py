@@ -15,7 +15,7 @@ import requests
 from scipy.sparse import coo_matrix
 
 from gpbp.data.population_file_address import link_source
-from notebooks.functions.country_main_area import get_main_area
+from gpbp.data_retrieval.country_main_area import get_main_area
 
 
 def pop_to_model(project: Project, model_place: str, source='WorldPop', overwrite=False):
