@@ -9,6 +9,7 @@ def add_subdivisions_to_model(project: Project, model_place: str, levels_to_add=
 
     gdf = get_subdivisions(model_place, levels_to_add)
 
+    
     #Check if subdivisions already exists otherwise create a file with this name
     conn = sqlite3.connect(join("project_database.sqlite")) 
     all_tables = [x[0] for x in conn.execute("SELECT name FROM sqlite_master WHERE type ='table'").fetchall()]

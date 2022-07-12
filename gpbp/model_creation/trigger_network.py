@@ -9,6 +9,7 @@ def trigger_network(project: Project, folder:str, model_place:str):
     
     try:
         project.new(folder)
+        
         import_net_from_osm(project, model_place)
         
     except FileNotFoundError:

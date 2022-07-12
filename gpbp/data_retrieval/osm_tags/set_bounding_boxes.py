@@ -1,8 +1,7 @@
 import geopandas as gpd
 import pandas as pd
 from math import ceil, sqrt
-from notebooks.functions.country_borders import get_country_borders
-
+from gpbp.model_creation.country_borders import get_country_borders
 
 def bounding_boxes(model_place: str, km_side=25):
 

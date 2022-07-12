@@ -28,7 +28,7 @@ def microsoft_buildings_by_zone(model_place: str, project:Project):
 
     model_gdf = gpd.read_file(var)
     
-    model_gdf['area'] = model_gdf.geometry.to_crs(3857).area
+    model_gdf['area'] = model_gdf.to_crs(3857).geometry.area
 
     zones = load_zones(project)
 
@@ -37,6 +37,8 @@ def microsoft_buildings_by_zone(model_place: str, project:Project):
     buildings_by_zone.drop(columns=['index_right'], inplace=True)
 
     buildings_by_zone.insert(0, column='id', value=list(range(1, len(buildings_by_zone)+1)))
+
+    buildings_by_zone['geom'] = buildings_by_zone.geometry.to_wkb()
 
     print('Saving Microsoft buildings.')
 
@@ -48,9 +50,7 @@ def microsoft_buildings_by_zone(model_place: str, project:Project):
     project.conn.commit()
 
     qry = '''INSERT into microsoft_buildings(id, area, zone_id, geometry) VALUES(?, ?, ?, CastToMulti(GeomFromWKB(?, 4326)));'''
-    list_of_tuples = [(x, y, z, a) for x, y, z, a in zip(buildings_by_zone.id, buildings_by_zone.area, 
-                                                         buildings_by_zone.zone_id, buildings_by_zone.geometry.to_wkb())]
-
+    list_of_tuples = list(buildings_by_zone[['id', 'area', 'zone_id', 'geom']].itertuples(index=False, name=None))
     project.conn.executemany(qry, list_of_tuples)
     project.conn.commit()
 

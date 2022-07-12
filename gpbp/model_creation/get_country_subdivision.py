@@ -10,7 +10,7 @@ def get_subdivisions(model_place:str, level:int):
 
     pop_path = '/../../../../gpbp/data/population/all_raster_pop_source.csv' #Verificar isso depois!!
     df = pd.read_csv(pop_path)
-    iso_code = df[df.Country.str.upper() == model_place.upper()].iso_code.values[0]
+    iso_code = df[df.Country.str.upper() == model_place.upper()].iso_country.values[0]
 
     r = requests.get(f"https://www.geoboundaries.org/gbRequest.html?ISO={iso_code}&ADM=ADM{level}")
 
