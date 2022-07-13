@@ -3,7 +3,7 @@ import numpy as np
 
 def pop_data(country_df):
     
-    country_age = np.unique(country_df.Age).tolist()
+    country_age = sorted([int(i) for i in np.unique(country_df.Age)])
     
     description_field = []
 

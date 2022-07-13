@@ -34,8 +34,8 @@ class Model:
     def create(self):
         """Creates the entire model"""
         
-        self.import_subdivisions(2, True)
         self.import_network()
+        self.import_subdivisions(2, True)
         self.import_population()
         self.build_zoning()
         self.import_population_pyramid()

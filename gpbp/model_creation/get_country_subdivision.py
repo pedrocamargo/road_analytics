@@ -8,7 +8,7 @@ from shapely import wkt
 
 def get_subdivisions(model_place:str, level:int):
 
-    pop_path = '/../../../../gpbp/data/population/all_raster_pop_source.csv' #Verificar isso depois!!
+    pop_path = '/home/jovyan/workspace/road_analytics/gpbp/data/population/all_raster_pop_source.csv'
     df = pd.read_csv(pop_path)
     iso_code = df[df.Country.str.upper() == model_place.upper()].iso_country.values[0]
 

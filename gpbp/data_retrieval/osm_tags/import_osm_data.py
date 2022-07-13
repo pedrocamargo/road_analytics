@@ -1,3 +1,4 @@
+import numpy as np
 from shapely.geometry import Point, Polygon
 import pandas as pd
 import geopandas as gpd
@@ -6,17 +7,17 @@ from gpbp.data.load_zones import load_zones
 from gpbp.data_retrieval.osm_tags.osm_buildings import buildings
 from gpbp.data_retrieval.osm_tags.osm_amenities import amenities
 from gpbp.data_retrieval.osm_tags.osm_tag_values import building_values, amenity_values
-
+from shapely import wkb
 
 def import_osm_data(tag:str, model_place:str, osm_data:dict, project:Project):
     
     if tag == 'building':
         df = pd.DataFrame.from_dict(buildings(osm_data, model_place))
-        df['geometry'] = df.apply(point_or_polygon, axis=1)  # AQUI
+        df['geom'] = df.apply(point_or_polygon, axis=1)  # AQUI
         tag_value = building_values
     elif tag == 'amenity':
         df = pd.DataFrame.from_dict(amenities(osm_data, model_place))
-        df['geometry'] = df.apply(lambda x: Point(x.lon, x.lat), axis=1)
+        df['geom'] = df.apply(lambda x: Point(x.lon, x.lat), axis=1) #aqui
         tag_value = amenity_values
     else:
         raise ValueError (f'No data with {tag} tag was imported.')
@@ -44,22 +45,23 @@ def import_osm_data(tag:str, model_place:str, osm_data:dict, project:Project):
     tag_by_zone.drop(columns='index_right', inplace=True)
 
     if tag == 'building':
-        tag_by_zone['area'] = tag_by_zone.geom.to_crs(3857).area
+        tag_by_zone['area'] = tag_by_zone.to_crs(3857).area
         table_name = 'osm_buildings'
         geom_type = 'MULTIPOLYGON'
-        #list_of_tuples = [(x, y, z, a, b, c) for x, y, z, a, b, c in zip(df.type, df.id, df.building, df.zone_id, df.area, df.geom.wkb)]
         list_of_tuples = list(tag_by_zone[['type', 'id', 'building', 'zone_id', 'area', 'geom']].fillna(0).itertuples(index=False, name=None))
         qry = f"INSERT into osm_buildings(type, id, building, zone_id, area, geometry) VALUES(?, ?, ?, ?, ?, CastToMulti(GeomFromWKB(?, 4326)));"
         print('Saving OSM buildings.')
+        project.conn.execute('CREATE TABLE IF NOT EXISTS osm_buildings("type" TEXT, "id" INTEGER, "building" TEXT, "zone_id" INTEGER,\
+                                                                        "area" FLOAT);')
     else:
         table_name = 'osm_amenities'
         geom_type = 'POINT'
         qry = f"INSERT into osm_amenities(type, id, amenity, zone_id, geometry) VALUES(?, ?, ?, ?, CastToPoint(GeomFromWKB(?, 4326)));"
-        #list_of_tuples = [(x, y, z, a, b) for x, y, z, a, b in zip(df.type, df.id, df.amenity, df.zone_id, df.geom.wkb)]
         list_of_tuples = list(tag_by_zone[['type', 'id', 'amenity', 'zone_id', 'geom']].fillna(0).itertuples(index=False, name=None))
         print('Saving OSM amenities.')
+        project.conn.execute(f'CREATE TABLE IF NOT EXISTS osm_amenities("type" TEXT, "id" INTEGER, "amenity" TEXT, "zone_id" INTEGER);')
 
-    project.conn.execute(f'CREATE TABLE IF NOT EXISTS {table_name}("type" TEXT, "id" INTEGER, "amenity" TEXT, "zone_id" INTEGER);')
+    
     project.conn.execute(f"SELECT AddGeometryColumn('{table_name}', 'geometry', 4326, '{geom_type}', 'XY' );")
     project.conn.execute(f"SELECT CreateSpatialIndex('{table_name}', 'geometry' );")
     project.conn.commit()
@@ -69,11 +71,11 @@ def import_osm_data(tag:str, model_place:str, osm_data:dict, project:Project):
 
     return tag_by_zone
 
-def point_or_polygon(row):  # NÃO TEM ESSA FUNC. DO OUTRO LADO
+def point_or_polygon(row): 
 
     if row.type == 'node':
 
-        return Point(row.lon, row.lat)
+        return Point(np.array([row.lon, row.lat])).wkb
 
     else:
 
@@ -81,4 +83,4 @@ def point_or_polygon(row):  # NÃO TEM ESSA FUNC. DO OUTRO LADO
         for dct in row.geometry:
             poly.append((dct['lon'], dct['lat']))
 
-        return Polygon(poly)
+        return Polygon(poly).wkb

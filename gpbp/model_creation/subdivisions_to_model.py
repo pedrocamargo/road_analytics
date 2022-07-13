@@ -8,7 +8,6 @@ from gpbp.model_creation.get_country_subdivision import get_subdivisions
 def add_subdivisions_to_model(project: Project, model_place: str, levels_to_add=2, overwrite=True):
 
     gdf = get_subdivisions(model_place, levels_to_add)
-
     
     #Check if subdivisions already exists otherwise create a file with this name
     conn = sqlite3.connect(join("project_database.sqlite")) 

@@ -1,3 +1,4 @@
+import numpy as np
 import geopandas as gpd
 import pandas as pd
 from math import ceil, sqrt
@@ -7,7 +8,7 @@ def bounding_boxes(model_place: str, km_side=25):
 
     country = get_country_borders(model_place)
 
-    geo_country = gpd.GeoDataFrame(pd.DataFrame(country, index=list(range(len(country))), columns=['geometry']), 
+    geo_country = gpd.GeoDataFrame(pd.DataFrame(list(country.geoms), index=np.arange(len(country.geoms)), columns=['geometry']), 
                                    geometry='geometry', crs=4326)
 
     parts = ceil(sqrt(geo_country.to_crs(3857).area.sum() / (km_side * km_side * 1000 * 1000)))
