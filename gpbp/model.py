@@ -9,13 +9,13 @@ import geopandas as gpd
 from aequilibrae import logger, Project
 
 from gpbp.data_retrieval import subdivisions
-from gpbp.data_retrieval.rural_access_index.basic_rai_computation import basic_RAI_data
 from gpbp.data_retrieval.trigger_import_amenities import trigger_import_amenities
 from gpbp.data_retrieval.trigger_import_building import trigger_building_import
 from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
 from gpbp.model_creation.trigger_network import trigger_network
+from gpbp.model_creation.trigger_population import trigger_population
 from gpbp.model_creation.zoning.zone_building import zone_builder
 from gpbp.model_creation.population_pyramid import get_population_pyramid
 
@@ -73,7 +73,7 @@ class Model:
                 *overwrite* (:obj:`bool`): Deletes pre-existing population_source_import. Defaults to False
         """
 
-        pop_to_model(self._project, self.__model_place, self.__population_source, overwrite)
+        trigger_population(self._project, self.__model_place, self.__population_source, overwrite=False)
 
     def build_zoning(self, hexbin_size=200, max_zone_pop=10000, min_zone_pop=500, save_hexbins=True):
         """Creates hexagonal bins, and then clusters it regarding the political subdivision.
@@ -126,10 +126,6 @@ class Model:
         """
 
         trigger_building_import(self.__model_place, self._project, self.__osm_data)
-
-    def rai_computation(self):
-
-        basic_RAI_data(self._project)
 
     @property
     def place(self):
