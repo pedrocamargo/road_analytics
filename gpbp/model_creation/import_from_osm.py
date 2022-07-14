@@ -18,7 +18,6 @@ def import_net_from_osm(project: Project, model_place: str):
     place_geo = get_country_borders(model_place)
 
     if place_geo.area == 0:
-        # TODO: Add a huge warning here
         raise Warning('No country borders were imported.')
 
     #Mudar aqui 

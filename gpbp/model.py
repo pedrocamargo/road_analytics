@@ -11,7 +11,6 @@ from aequilibrae import logger, Project
 from gpbp.data_retrieval import subdivisions
 from gpbp.data_retrieval.trigger_import_amenities import trigger_import_amenities
 from gpbp.data_retrieval.trigger_import_building import trigger_building_import
-from gpbp.model_creation.raster_to_model import pop_to_model
 from gpbp.model_creation.set_source import set_source
 from gpbp.model_creation.subdivisions_to_model import add_subdivisions_to_model
 from gpbp.model_creation.trigger_network import trigger_network
@@ -21,7 +20,6 @@ from gpbp.model_creation.population_pyramid import get_population_pyramid
 
 class Model:
     def __init__(self, network_path: str, model_place: str = None):
-        # TODO: MAKE SURE THE CLASS WORKS FOR USING THE MODEL AND CREATING IT
         # If the model exists, you would only tell where it is (network_path), and the software
         # would check and populate the model place.  Needs to be implemented
         self.__model_place = model_place

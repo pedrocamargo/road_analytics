@@ -57,6 +57,4 @@ def population_raster(data_link, field_name, project):
                 (df.latitude < maxy)]
     df.fillna(0, inplace=True)
     
-    gdf_pop = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs=4326)
-    
-    return gdf_pop
+    return df
