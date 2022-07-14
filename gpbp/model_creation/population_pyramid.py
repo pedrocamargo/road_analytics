@@ -27,7 +27,7 @@ def get_population_pyramid(project:Project, model_place:str):
     
     for _, row in country_df.iterrows():
 
-        df = population_raster(row.data, row.field_name, project)
+        df = population_raster(row.data_link, row.field_name, project)
         
         gdf_pop = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs=4326)
         
